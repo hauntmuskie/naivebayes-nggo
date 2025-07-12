@@ -143,7 +143,7 @@ export default async function ReportsPage() {
         description="Generate dan kelola laporan komprehensif untuk sistem klasifikasi Naive Bayes analisis kepuasan penumpang"
         badge={{
           text: `${reports.length} jenis laporan tersedia`,
-          variant: "success",
+          variant: "default",
         }}
       />
 

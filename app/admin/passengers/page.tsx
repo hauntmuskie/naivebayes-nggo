@@ -43,7 +43,7 @@ export default async function DatasetRecordsPage() {
         description="Kelola catatan dataset dari file CSV yang diunggah dan klasifikasi"
         badge={{
           text: `${totalRecords} total catatan${totalRecords !== 1 ? "" : ""}`,
-          variant: totalRecords > 0 ? "success" : "secondary",
+          variant: totalRecords > 0 ? "default" : "secondary",
         }}
       />
 

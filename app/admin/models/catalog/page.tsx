@@ -29,7 +29,7 @@ export default async function ModelsCatalogPage() {
           text: `${models.length} model${
             models.length !== 1 ? "" : ""
           } tersedia`,
-          variant: models.length > 0 ? "success" : "secondary",
+          variant: models.length > 0 ? "default" : "secondary",
         }}
       />
 
