@@ -42,7 +42,7 @@ export default async function ClassifyHistoryPage() {
           description="Anda belum melakukan klasifikasi apapun. Mulai klasifikasi data untuk melihat riwayat di sini."
           action={{
             label: "Mulai Klasifikasi",
-            href: "/classify",
+            href: "/admin/classify",
           }}
         />
       )}

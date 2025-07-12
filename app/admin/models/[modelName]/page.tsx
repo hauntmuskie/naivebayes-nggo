@@ -52,17 +52,19 @@ export default async function ModelDetailPage({
           className="h-8 w-8 flex-shrink-0"
           asChild
         >
-          <Link href="/models">
+          <Link href="/admin/models/catalog">
             <ChevronLeft size={18} />
           </Link>
         </Button>
         <div className="flex items-center gap-4 flex-1">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">
             {model.modelName}
-          </h1>{" "}
+          </h1>
           <Button className="ml-auto" asChild>
             <Link
-              href={`/classify?model=${encodeURIComponent(model.modelName)}`}
+              href={`/admin/classify?model=${encodeURIComponent(
+                model.modelName
+              )}`}
             >
               Klasifikasi Data
             </Link>

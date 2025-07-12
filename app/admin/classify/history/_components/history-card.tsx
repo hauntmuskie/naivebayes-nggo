@@ -19,7 +19,11 @@ interface HistoryCardProps {
   isDeleting?: boolean;
 }
 
-export function HistoryCard({ item, onDelete, isDeleting = false }: HistoryCardProps) {
+export function HistoryCard({
+  item,
+  onDelete,
+  isDeleting = false,
+}: HistoryCardProps) {
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -101,7 +105,7 @@ export function HistoryCard({ item, onDelete, isDeleting = false }: HistoryCardP
                 <Trash2 className="h-3 w-3" />
               </Button>
               <Link
-                href={`/classify/history/${item.id}`}
+                href={`/admin/classify/history/${item.id}`}
                 className="text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md bg-accent/50 hover:bg-accent/60 flex items-center justify-center h-6 w-6"
               >
                 <ChevronRight className="h-4 w-4" />
