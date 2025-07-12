@@ -104,7 +104,7 @@ export function DatasetRecords({ records }: DatasetRecordsTableProps) {
     setFilters((prev) => ({ ...prev, fileName: value || "" }));
   }, []);
 
-  const renderCellValue = (value: any) => {
+  const renderCellValue = (value: unknown) => {
     if (value === null || value === undefined) return "-";
     if (typeof value === "boolean") return value ? "Yes" : "No";
     if (typeof value === "number") return value.toLocaleString();

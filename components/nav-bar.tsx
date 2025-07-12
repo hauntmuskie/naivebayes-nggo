@@ -121,7 +121,6 @@ export function NavBar() {
                   currentPath !== "/admin" &&
                   item.href !== "/admin"
                 : currentPath === item.href;
-              const isRootPage = currentPath === item.href;
               const showSubItems =
                 hasSubItems &&
                 currentPath.startsWith(item.href) &&

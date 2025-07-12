@@ -42,7 +42,6 @@ export default async function SystemSummaryReportPage({
       fetchClassificationHistory(),
     ]);
 
-  // System Statistics
   const totalModels = models.length;
   const totalClassifications = classifications.length;
   const totalDatasetRecords = datasetRecords.length;
@@ -472,8 +471,9 @@ export default async function SystemSummaryReportPage({
             </p>
             {bestModel && (
               <p>
-                • Model terbaik adalah <strong>"{bestModel.modelName}"</strong>{" "}
-                dengan akurasi{" "}
+                • Model terbaik adalah{" "}
+                <strong>&quot;{bestModel.modelName}&quot;</strong> dengan
+                akurasi{" "}
                 <strong>{(bestModel.accuracy * 100).toFixed(2)}%</strong>
               </p>
             )}

@@ -45,13 +45,12 @@ export default async function ClassificationResultsReportPage({
     (cls: ClassificationsSelect) => cls.confidence < 0.5
   ).length;
 
-  // Group by model
   const classificationsByModel = classifications.reduce(
     (
       acc: Record<string, ClassificationsSelect[]>,
       cls: ClassificationsSelect
     ) => {
-      const model = models.find((m: any) => m.id === cls.modelId);
+      const model = models.find((m: { id: string }) => m.id === cls.modelId);
       const modelName = model?.modelName || "Unknown Model";
       if (!acc[modelName]) {
         acc[modelName] = [];
@@ -203,7 +202,7 @@ export default async function ClassificationResultsReportPage({
                   .map(
                     (classification: ClassificationsSelect, index: number) => {
                       const model = models.find(
-                        (m: any) => m.id === classification.modelId
+                        (m: { id: string }) => m.id === classification.modelId
                       );
                       return (
                         <tr key={classification.id}>
@@ -387,7 +386,7 @@ export default async function ClassificationResultsReportPage({
               .slice(0, 10)
               .map((classification: ClassificationsSelect, index: number) => {
                 const model = models.find(
-                  (m: any) => m.id === classification.modelId
+                  (m: { id: string }) => m.id === classification.modelId
                 );
                 return (
                   <div

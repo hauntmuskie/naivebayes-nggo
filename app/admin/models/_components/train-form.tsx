@@ -134,8 +134,8 @@ export function TrainForm() {
         description: `Model "${state.modelName}" has been trained and is ready to use.`,
       });
       router.push(`/admin/models/${encodeURIComponent(result.modelName)}`);
-    } catch (err: any) {
-      updateState({ error: err.message || "Failed to train model" });
+    } catch (err: unknown) {
+      updateState({ error: (err as Error).message || "Failed to train model" });
     } finally {
       updateState({ isLoading: false });
     }

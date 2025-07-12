@@ -166,9 +166,9 @@ export function ClassifyForm({
         } records using model "${selectedModel}".`,
       });
 
-      router.push(`/classify/history/${historyId}`);
-    } catch (err: any) {
-      let errorMessage = err.message || "Classification failed";
+      router.push(`/admin/classify/history/${historyId}`);
+    } catch (err: unknown) {
+      let errorMessage = (err as Error).message || "Classification failed";
       let missingCols: string[] = [];
 
       try {

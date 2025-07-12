@@ -219,7 +219,7 @@ export function MetricsCard({
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-            {metricsData.map((metric, index) => {
+            {metricsData.map((metric) => {
               const scoreLevel = getScoreLevel(metric.value);
               const percentage = formatPercentage(metric.value);
               const IconComponent = metric.icon;

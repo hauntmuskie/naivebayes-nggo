@@ -321,7 +321,7 @@ export default async function DatasetAnalysisReportPage({
           <div className="space-y-3">
             {Object.entries(recordsByFile)
               .slice(0, 10)
-              .map(([fileName, records], index) => (
+              .map(([fileName, records]) => (
                 <div
                   key={fileName}
                   className="flex items-center justify-between p-3 rounded-lg border-l-4 border-l-purple-500 bg-gray-50"

@@ -94,21 +94,23 @@ export default async function ClassificationDetailsPage({
   })();
 
   const correctPredictions = results.filter(
-    (r: any) => r.actualClass === r.predictedClass
+    (r: { actualClass: string; predictedClass: string }) =>
+      r.actualClass === r.predictedClass
   ).length;
   const accuracyFromResults =
     results.length > 0 ? correctPredictions / results.length : 0;
   const confidenceAvg =
     results.length > 0
-      ? results.reduce((sum: number, r: any) => sum + r.confidence, 0) /
-        results.length
+      ? results.reduce(
+          (sum: number, r: { confidence: number }) => sum + r.confidence,
+          0
+        ) / results.length
       : 0;
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        {" "}
         <div className="flex items-center gap-4">
           <Link href="/classify/history">
             <Button variant="outline">
@@ -127,7 +129,6 @@ export default async function ClassificationDetailsPage({
       </div>
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {" "}
         <Card className="border-border/40">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -178,7 +179,6 @@ export default async function ClassificationDetailsPage({
       {/* Metrics Section */}
       {metrics && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {" "}
           <Card className="h-full flex flex-col border-border/40">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -274,35 +274,44 @@ export default async function ClassificationDetailsPage({
           <div className="mt-6">
             <h4 className="font-semibold mb-3">Contoh Prediksi</h4>
             <div className="space-y-2 max-h-96 overflow-y-auto">
-              {results.slice(0, 10).map((result: any, index: number) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-mono text-muted-foreground">
-                      #{index + 1}
-                    </span>
-                    <Badge
-                      variant={
-                        result.actualClass === result.predictedClass
-                          ? "default"
-                          : "destructive"
-                      }
-                    >
-                      {result.predictedClass}
-                    </Badge>
-                    {result.actualClass && (
-                      <span className="text-sm text-muted-foreground">
-                        Aktual: {result.actualClass}
+              {results.slice(0, 10).map(
+                (
+                  result: {
+                    actualClass: string;
+                    predictedClass: string;
+                    confidence: number;
+                  },
+                  index: number
+                ) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-mono text-muted-foreground">
+                        #{index + 1}
                       </span>
-                    )}
+                      <Badge
+                        variant={
+                          result.actualClass === result.predictedClass
+                            ? "default"
+                            : "destructive"
+                        }
+                      >
+                        {result.predictedClass}
+                      </Badge>
+                      {result.actualClass && (
+                        <span className="text-sm text-muted-foreground">
+                          Aktual: {result.actualClass}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-sm font-medium">
+                      {(result.confidence * 100).toFixed(1)}%
+                    </div>
                   </div>
-                  <div className="text-sm font-medium">
-                    {(result.confidence * 100).toFixed(1)}%
-                  </div>
-                </div>
-              ))}
+                )
+              )}
               {results.length > 10 && (
                 <div className="text-center text-sm text-muted-foreground py-2">
                   ... dan {results.length - 10} hasil lainnya
