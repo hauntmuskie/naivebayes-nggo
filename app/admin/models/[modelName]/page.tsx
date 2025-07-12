@@ -1,5 +1,5 @@
 import { fetchModels } from "@/_actions";
-import { MetricsCard } from "@/app/admin/models/_components/metrics-card";
+import { MetricsCard } from "@/components/metrics-card";
 import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";

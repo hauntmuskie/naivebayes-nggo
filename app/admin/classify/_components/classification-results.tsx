@@ -9,12 +9,12 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MetricsCard } from "@/app/models/_components/metrics-card";
 import { ConfusionMatrix } from "@/components/confusion-matrix";
 import { hasActualClasses, formatConfidence } from "@/lib/utils";
 import { BarChart3, Target, CheckCircle, XCircle, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { MetricsCard } from "@/components/metrics-card";
 
 type ClassificationResponse = {
   results: ClassificationsSelect[];
@@ -173,8 +173,8 @@ export function ClassificationResults({
                               <Badge
                                 variant={
                                   result.actualClass === result.predictedClass
-                                    ? "success"
-                                    : "error"
+                                    ? "secondary"
+                                    : "destructive"
                                 }
                                 className="font-medium"
                               >
