@@ -7,7 +7,7 @@ interface PageHeaderProps {
   description?: string;
   badge?: {
     text: string;
-    variant?: "default" | "secondary" | "success" | "warning" | "error";
+    variant?: "default" | "secondary" | "destructive" | "outline";
   };
   action?: ReactNode;
   children?: ReactNode;
