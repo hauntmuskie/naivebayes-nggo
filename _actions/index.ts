@@ -1,3 +1,5 @@
+"use server";
+
 import {
   ModelsSelect,
   ModelsInsert,
@@ -20,16 +22,6 @@ import database from "@/database";
 import { desc, eq } from "drizzle-orm";
 import { revalidateTag, revalidatePath } from "next/cache";
 import { unstable_cache } from "next/cache";
-import { login as authLogin, logout as authLogout } from "./auth";
-import {
-  verifySession as authRequireAuth,
-  isAuthenticated as authIsAuthenticated,
-} from "@/lib/dal";
-
-export const login = authLogin;
-export const logout = authLogout;
-export const isAuthenticated = authIsAuthenticated;
-export const requireAuth = authRequireAuth;
 
 const BACKEND_URL = process.env.BACKEND_URL;
 
@@ -138,8 +130,6 @@ async function saveDatasetRecordsFromCSV(
 }
 
 export async function trainModel(formData: FormData): Promise<ModelsSelect> {
-  await authRequireAuth();
-
   if (!BACKEND_URL) {
     throw new Error();
   }
@@ -204,8 +194,6 @@ export async function trainModel(formData: FormData): Promise<ModelsSelect> {
 }
 
 export async function deleteModel(modelName: string): Promise<boolean> {
-  await authRequireAuth();
-
   try {
     const model = await database.query.models.findFirst({
       where: eq(models.modelName, modelName),
@@ -247,8 +235,6 @@ export async function deleteModel(modelName: string): Promise<boolean> {
 export async function classifyData(
   formData: FormData
 ): Promise<ClassificationResponse> {
-  await authRequireAuth();
-
   if (!BACKEND_URL) {
     throw new Error();
   }
@@ -371,8 +357,6 @@ export const fetchClassificationHistory = unstable_cache(
 );
 
 export async function deleteClassificationHistory(id: string): Promise<void> {
-  await authRequireAuth();
-
   try {
     await database
       .delete(classificationHistory)

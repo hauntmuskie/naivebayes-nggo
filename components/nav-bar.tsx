@@ -3,9 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
-import { logout } from "@/_actions";
 import {
   LayoutDashboard,
   Database,
@@ -14,9 +12,7 @@ import {
   History,
   Users,
   FileText,
-  LogOut,
 } from "lucide-react";
-
 const navItems = [
   {
     href: "/admin/dashboard",
@@ -75,21 +71,13 @@ const navItems = [
     hoverColor: "group-hover:text-emerald-400",
   },
 ];
-
-interface NavBarProps {
-  authenticated: boolean;
-}
-
-export function NavBar({ authenticated }: NavBarProps) {
+export function NavBar() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
     setMounted(true);
   }, []);
-
   const isClient = typeof window !== "undefined";
-
   const currentPath = useMemo(() => {
     return isClient && mounted ? pathname || "/" : "/";
   }, [isClient, mounted, pathname]);
@@ -102,7 +90,7 @@ export function NavBar({ authenticated }: NavBarProps) {
         }`}
         style={{ visibility: mounted ? "visible" : "hidden" }}
       >
-        {/* Header */}{" "}
+        {/* Header */}
         <div className="p-6 border-b border-sidebar-border">
           <Link href="/admin/dashboard" className="flex items-center gap-3">
             <div className="h-10 w-30 relative overflow-hidden rounded-lg shadow-sm">
@@ -123,178 +111,10 @@ export function NavBar({ authenticated }: NavBarProps) {
         {/* Navigation */}
         <div className="flex-1 p-4 space-y-2">
           <div className="mb-4">
-            {" "}
             <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 mb-3">
               Navigasi
             </div>
-            {authenticated ? (
-              // Show full navigation for authenticated users
-              navItems.map((item) => {
-                // Use the memoized current path
-                const hasSubItems = item.subItems && item.subItems.length > 0;
-                const isActive = hasSubItems
-                  ? currentPath.startsWith(item.href) &&
-                    currentPath !== "/admin" &&
-                    item.href !== "/admin"
-                  : currentPath === item.href;
-                const isRootPage = currentPath === item.href;
-                const showSubItems =
-                  hasSubItems &&
-                  currentPath.startsWith(item.href) &&
-                  currentPath !== "/admin" &&
-                  item.href !== "/admin";
-
-                return (
-                  <div key={item.href}>
-                    <Link
-                      href={item.href}
-                      className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
-                        isActive
-                          ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                          : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
-                      }`}
-                    >
-                      <div
-                        className={`transition-colors ${
-                          isActive
-                            ? item.color
-                            : `text-muted-foreground ${item.hoverColor}`
-                        }`}
-                      >
-                        {React.cloneElement(item.icon, {
-                          className: isActive
-                            ? item.color
-                            : `text-muted-foreground ${item.hoverColor} transition-colors`,
-                        })}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium">{item.label}</div>
-                        <div className="text-xs text-muted-foreground truncate">
-                          {item.description}
-                        </div>
-                      </div>
-                      {isActive && (
-                        <div className="h-2 w-2 bg-primary rounded-full" />
-                      )}
-                    </Link>{" "}
-                    {/* Sub navigation */}
-                    {showSubItems && (
-                      <div className="ml-6 mt-2 space-y-1 border-l border-sidebar-border pl-4">
-                        {item.subItems!.map((subItem) => {
-                          const isSubActive = currentPath === subItem.href;
-                          return (
-                            <Link
-                              key={subItem.href}
-                              href={subItem.href}
-                              className={`group flex items-center gap-2 px-2 py-1.5 rounded-md transition-all duration-200 text-sm ${
-                                isSubActive
-                                  ? "bg-sidebar-accent/70 text-sidebar-accent-foreground"
-                                  : "text-muted-foreground hover:bg-sidebar-accent/30 hover:text-sidebar-accent-foreground"
-                              }`}
-                            >
-                              <div className="text-muted-foreground">
-                                {subItem.icon}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="text-xs font-medium">
-                                  {subItem.label}
-                                </div>
-                                <div className="text-xs text-muted-foreground/80 truncate">
-                                  {subItem.description}
-                                </div>
-                              </div>
-                              {isSubActive && (
-                                <div className="h-1.5 w-1.5 bg-primary rounded-full" />
-                              )}
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })
-            ) : (
-              // Show limited navigation for unauthenticated users
-              <div className="space-y-2">
-                <Link
-                  href="/"
-                  className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
-                    currentPath === "/"
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                      : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
-                  }`}
-                >
-                  <LayoutDashboard size={18} className="text-blue-500" />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium">Dasbor</div>
-                    <div className="text-xs text-muted-foreground truncate">
-                      Gambaran & wawasan
-                    </div>
-                  </div>
-                </Link>
-                <Link
-                  href="/login"
-                  className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
-                    currentPath === "/login"
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
-                      : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
-                  }`}
-                >
-                  <LogOut size={18} className="text-green-500" />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium">Masuk</div>
-                    <div className="text-xs text-muted-foreground truncate">
-                      Akses admin
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            )}{" "}
-          </div>
-        </div>
-        {/* Footer */}
-        <div className="p-4 border-t border-sidebar-border">
-          {authenticated ? (
-            <Button
-              onClick={() => logout()}
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start text-muted-foreground hover:text-foreground mb-3"
-            >
-              <LogOut size={16} className="mr-2" />
-              Keluar
-            </Button>
-          ) : (
-            <Link href="/login">
-              <Button
-                variant="default"
-                size="sm"
-                className="w-full justify-start mb-3"
-              >
-                <LogOut size={16} className="mr-2" />
-                Masuk
-              </Button>
-            </Link>
-          )}
-          <div className="text-xs text-muted-foreground mt-2 opacity-70">
-            {new Date().getFullYear()} • Gapura Angkasa
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Bottom Navigation */}
-      <nav
-        className={`lg:hidden fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border z-40 transition-opacity duration-200 ${
-          mounted ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ visibility: mounted ? "visible" : "hidden" }}
-      >
-        {" "}
-        <div className="flex items-center justify-around py-2">
-          {authenticated ? (
-            navItems.map((item) => {
-              // Use the memoized current path
+            {navItems.map((item) => {
               const hasSubItems = item.subItems && item.subItems.length > 0;
               const isActive = hasSubItems
                 ? currentPath.startsWith(item.href) &&
@@ -302,48 +122,70 @@ export function NavBar({ authenticated }: NavBarProps) {
                   item.href !== "/admin"
                 : currentPath === item.href;
               const isRootPage = currentPath === item.href;
-
+              const showSubItems =
+                hasSubItems &&
+                currentPath.startsWith(item.href) &&
+                currentPath !== "/admin" &&
+                item.href !== "/admin";
               return (
-                <div key={item.href} className="flex flex-col items-center">
+                <div key={item.href}>
                   <Link
                     href={item.href}
-                    className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+                    className={`group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
                       isActive
-                        ? item.color
-                        : `text-muted-foreground ${item.hoverColor}`
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
+                        : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground"
                     }`}
                   >
-                    <div className="transition-colors">
+                    <div
+                      className={`transition-colors ${
+                        isActive
+                          ? item.color
+                          : `text-muted-foreground ${item.hoverColor}`
+                      }`}
+                    >
                       {React.cloneElement(item.icon, {
                         className: isActive
                           ? item.color
                           : `text-muted-foreground ${item.hoverColor} transition-colors`,
                       })}
                     </div>
-                    <span className="text-xs font-medium">
-                      {item.label.split(" ")[0]}
-                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium">{item.label}</div>
+                      <div className="text-xs text-muted-foreground truncate">
+                        {item.description}
+                      </div>
+                    </div>
                     {isActive && (
-                      <div className="h-1 w-6 bg-primary rounded-full" />
+                      <div className="h-2 w-2 bg-primary rounded-full" />
                     )}
-                  </Link>{" "}
-                  {/* Mobile sub-navigation - appears when on root page */}
-                  {hasSubItems && isRootPage && (
-                    <div className="absolute bottom-16 bg-sidebar border border-sidebar-border rounded-lg shadow-lg p-2 min-w-32 left-1/2 transform -translate-x-1/2">
+                  </Link>
+                  {/* Sub navigation */}
+                  {showSubItems && (
+                    <div className="ml-6 mt-2 space-y-1 border-l border-sidebar-border pl-4">
                       {item.subItems!.map((subItem) => {
                         const isSubActive = currentPath === subItem.href;
                         return (
                           <Link
                             key={subItem.href}
                             href={subItem.href}
-                            className={`flex items-center gap-2 px-2 py-1.5 rounded-md transition-colors text-xs whitespace-nowrap ${
+                            className={`group flex items-center gap-2 px-2 py-1.5 rounded-md transition-all duration-200 text-sm ${
                               isSubActive
-                                ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                                : "text-muted-foreground hover:bg-sidebar-accent/50"
+                                ? "bg-sidebar-accent/70 text-sidebar-accent-foreground"
+                                : "text-muted-foreground hover:bg-sidebar-accent/30 hover:text-sidebar-accent-foreground"
                             }`}
                           >
-                            {subItem.icon}
-                            {subItem.label}
+                            <div className="text-muted-foreground">
+                              {subItem.icon}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-xs font-medium">
+                                {subItem.label}
+                              </div>
+                              <div className="text-xs text-muted-foreground/80 truncate">
+                                {subItem.description}
+                              </div>
+                            </div>
                           </Link>
                         );
                       })}
@@ -351,40 +193,80 @@ export function NavBar({ authenticated }: NavBarProps) {
                   )}
                 </div>
               );
-            })
-          ) : (
-            // Mobile navigation for unauthenticated users
-            <div className="flex w-full">
-              <Link
-                href="/"
-                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 flex-1 ${
-                  currentPath === "/"
-                    ? "text-blue-500"
-                    : "text-muted-foreground"
-                }`}
-              >
-                <LayoutDashboard size={18} />
-                <span className="text-xs font-medium">Dasbor</span>
-                {currentPath === "/" && (
-                  <div className="h-1 w-6 bg-primary rounded-full" />
+            })}{" "}
+          </div>{" "}
+        </div>
+        {/* Footer */}
+        <div className="p-4 border-t border-sidebar-border">
+          <div className="text-xs text-muted-foreground mt-2 opacity-70">
+            {new Date().getFullYear()} • Gapura Angkasa
+          </div>
+        </div>
+      </nav>
+      {/* Mobile Bottom Navigation */}
+      <nav
+        className={`lg:hidden fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border z-40 transition-opacity duration-200 ${
+          mounted ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ visibility: mounted ? "visible" : "hidden" }}
+      >
+        <div className="flex items-center justify-around py-2">
+          {navItems.map((item) => {
+            const hasSubItems = item.subItems && item.subItems.length > 0;
+            const isActive = hasSubItems
+              ? currentPath.startsWith(item.href) &&
+                currentPath !== "/admin" &&
+                item.href !== "/admin"
+              : currentPath === item.href;
+            const isRootPage = currentPath === item.href;
+            return (
+              <div key={item.href} className="flex flex-col items-center">
+                <Link
+                  href={item.href}
+                  className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? item.color
+                      : `text-muted-foreground ${item.hoverColor}`
+                  }`}
+                >
+                  <div className="transition-colors">
+                    {React.cloneElement(item.icon, {
+                      className: isActive
+                        ? item.color
+                        : `text-muted-foreground ${item.hoverColor} transition-colors`,
+                    })}
+                  </div>
+                  <span className="text-xs font-medium">
+                    {item.label.split(" ")[0]}
+                  </span>
+                  {isActive && (
+                    <div className="h-1 w-6 bg-primary rounded-full" />
+                  )}
+                </Link>
+                {/* Mobile sub-navigation - appears when on root page */}
+                {hasSubItems && isRootPage && (
+                  <div className="absolute bottom-16 bg-sidebar border border-sidebar-border rounded-lg shadow-lg p-2 min-w-32 left-1/2 transform -translate-x-1/2">
+                    {item.subItems!.map((subItem) => {
+                      const isSubActive = currentPath === subItem.href;
+                      return (
+                        <Link
+                          key={subItem.href}
+                          href={subItem.href}
+                          className={`flex items-center gap-2 px-2 py-1.5 rounded-md transition-colors text-xs whitespace-nowrap ${
+                            isSubActive
+                              ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                              : "text-muted-foreground hover:bg-sidebar-accent/50"
+                          }`}
+                        >
+                          {subItem.icon} {subItem.label}
+                        </Link>
+                      );
+                    })}
+                  </div>
                 )}
-              </Link>
-              <Link
-                href="/login"
-                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-200 flex-1 ${
-                  currentPath === "/login"
-                    ? "text-green-500"
-                    : "text-muted-foreground"
-                }`}
-              >
-                <LogOut size={18} />
-                <span className="text-xs font-medium">Masuk</span>
-                {currentPath === "/login" && (
-                  <div className="h-1 w-6 bg-primary rounded-full" />
-                )}
-              </Link>
-            </div>
-          )}{" "}
+              </div>
+            );
+          })}
         </div>
       </nav>
     </>
