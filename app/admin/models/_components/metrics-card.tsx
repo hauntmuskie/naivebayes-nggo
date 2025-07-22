@@ -8,6 +8,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatPercentage, cn } from "@/lib/utils";
+import { ConfusionMatrix } from "@/components/confusion-matrix";
 import { deleteModel } from "@/_actions";
 import Link from "next/link";
 import {
@@ -86,7 +87,7 @@ export function MetricsCard({
   };
   const handleDeleteModel = () => {
     if (!model) return;
-    
+
     openDialog({
       title: "Hapus Model",
       description: `Apakah Anda yakin ingin menghapus model "${model.modelName}"? Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data dan metrik terkait.`,
@@ -379,6 +380,12 @@ export function MetricsCard({
           </div>
         </div>
       </CardContent>
+      {/* Confusion Matrix Section */}
+      {metrics.confusionMatrix && model?.classes && (
+        <div className="px-8 pb-8">
+          <ConfusionMatrix metrics={metrics} classes={model.classes} />
+        </div>
+      )}
       <ConfirmationDialog />
     </Card>
   );

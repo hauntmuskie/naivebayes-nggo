@@ -1,6 +1,7 @@
 import { fetchModels } from "@/_actions";
 import { MetricsCard } from "@/app/admin/models/_components/metrics-card";
 import { Button } from "@/components/ui/button";
+import { ConfusionMatrix } from "@/components/confusion-matrix";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -71,11 +72,13 @@ export default async function ModelDetailPage({
       </div>
 
       {model.metrics && model.metrics.length > 0 && (
-        <MetricsCard
-          metrics={model.metrics[0]}
-          title="Kinerja Model"
-          model={model}
-        />
+        <>
+          <MetricsCard
+            metrics={model.metrics[0]}
+            title="Kinerja Model"
+            model={model}
+          />
+        </>
       )}
     </div>
   );
