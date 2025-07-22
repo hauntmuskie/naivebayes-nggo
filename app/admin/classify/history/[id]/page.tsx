@@ -110,7 +110,7 @@ export default async function ClassificationDetailsPage({
       <div className="flex items-center justify-between">
         {" "}
         <div className="flex items-center gap-4">
-          <Link href="/classify/history">
+          <Link href="/admin/classify/history">
             <Button variant="outline">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Kembali
