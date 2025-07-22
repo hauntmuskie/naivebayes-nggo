@@ -270,7 +270,7 @@ export default async function SystemSummaryReportPage({
         </div>
         <div className="flex gap-2">
           <Button asChild>
-            <a href="/reports/system-summary?print=true" target="_blank">
+            <a href="/admin/reports/system-summary?print=true" target="_blank">
               <FileText className="h-4 w-4 mr-2" />
               Cetak Laporan
             </a>

@@ -223,7 +223,7 @@ export default async function DatasetAnalysisReportPage({
         </div>
         <div className="flex gap-2">
           <Button asChild>
-            <a href="/reports/dataset-analysis?print=true" target="_blank">
+            <a href="/admin/reports/dataset-analysis?print=true" target="_blank">
               <Database className="h-4 w-4 mr-2" />
               Cetak Laporan
             </a>

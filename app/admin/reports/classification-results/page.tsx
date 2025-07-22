@@ -259,7 +259,7 @@ export default async function ClassificationResultsReportPage({
         <div className="flex gap-2">
           <Button asChild>
             <a
-              href="/reports/classification-results?print=true"
+              href="/admin/reports/classification-results?print=true"
               target="_blank"
             >
               <TrendingUp className="h-4 w-4 mr-2" />

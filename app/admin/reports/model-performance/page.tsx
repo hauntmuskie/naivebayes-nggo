@@ -182,7 +182,7 @@ export default async function ModelPerformanceReportPage({
         </div>
         <div className="flex gap-2">
           <Button asChild>
-            <a href="/reports/model-performance?print=true" target="_blank">
+            <a href="/admin/reports/model-performance?print=true" target="_blank">
               <BarChart3 className="h-4 w-4 mr-2" />
               Cetak Laporan
             </a>

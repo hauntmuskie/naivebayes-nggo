@@ -78,7 +78,7 @@ export default async function ReportsPage() {
       icon: BarChart3,
       color: "blue" as const,
       stats: `${totalModels} model terlatih`,
-      href: "/reports/model-performance",
+      href: "/admin/reports/model-performance",
       features: [
         "Metrics Performa",
         "Confusion Matrix",
@@ -94,7 +94,7 @@ export default async function ReportsPage() {
       icon: TrendingUp,
       color: "green" as const,
       stats: `${totalClassifications} prediksi`,
-      href: "/reports/classification-results",
+      href: "/admin/reports/classification-results",
       features: [
         "Distribusi Kelas",
         "Confidence Analysis",
@@ -110,7 +110,7 @@ export default async function ReportsPage() {
       icon: Database,
       color: "purple" as const,
       stats: `${totalDatasetRecords} record`,
-      href: "/reports/dataset-analysis",
+      href: "/admin/reports/dataset-analysis",
       features: [
         "Distribusi Data",
         "Feature Analysis",
@@ -126,7 +126,7 @@ export default async function ReportsPage() {
       icon: FileText,
       color: "orange" as const,
       stats: `Akurasi rata-rata: ${avgAccuracy}%`,
-      href: "/reports/system-summary",
+      href: "/admin/reports/system-summary",
       features: [
         "Statistik Keseluruhan",
         "Usage Analytics",
