@@ -9,32 +9,39 @@ import { Calendar, TrendingUp, Trash2, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useConfirmationDialog } from "@/components/confirmation-dialog";
 
 export function ModelCard({ model }: { model: ModelsWithMetrics }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const { openDialog, ConfirmationDialog } = useConfirmationDialog();
 
   const handleDeleteModel = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (
-      confirm(`Apakah Anda yakin ingin menghapus model ${model.modelName}?`)
-    ) {
-      setIsDeleting(true);
-      try {
-        const success = await deleteModel(model.modelName);
-        if (!success) {
-          toast.error("Gagal menghapus model. Silakan coba lagi.");
-        } else {
-          toast.success(`Model ${model.modelName} berhasil dihapus.`);
+    openDialog({
+      title: "Hapus Model",
+      description: `Apakah Anda yakin ingin menghapus model "${model.modelName}"? Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data terkait.`,
+      confirmText: "Hapus Model",
+      cancelText: "Batal",
+      variant: "destructive",
+      onConfirm: async () => {
+        setIsDeleting(true);
+        try {
+          const success = await deleteModel(model.modelName);
+          if (!success) {
+            toast.error("Gagal menghapus model. Silakan coba lagi.");
+          } else {
+            toast.success(`Model ${model.modelName} berhasil dihapus.`);
+          }
+        } catch (error) {
+          console.error("Error deleting model:", error);
+          toast.error("Terjadi kesalahan saat menghapus model.");
+        } finally {
+          setIsDeleting(false);
         }
-      } catch (error) {
-        console.error("Error deleting model:", error);
-        toast.error("Terjadi kesalahan saat menghapus model.");
-      } finally {
-        setIsDeleting(false);
-      }
-    }
+      },
+    });
   };
 
   const accuracy = model.accuracy;
@@ -101,6 +108,7 @@ export function ModelCard({ model }: { model: ModelsWithMetrics }) {
           </div>
         </CardContent>
       </Card>
+      <ConfirmationDialog />
     </Link>
   );
 }

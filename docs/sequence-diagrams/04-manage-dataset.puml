@@ -1,0 +1,26 @@
+@startuml Manage Dataset
+title Manage Dataset
+
+actor User
+boundary DatasetPage
+control API
+database DB
+
+User -> DatasetPage: Buka halaman dataset
+activate DatasetPage
+
+DatasetPage -> API: fetchDatasets()
+activate API
+
+API -> DB: Ambil semua dataset records
+activate DB
+DB --> API: List data penumpang
+deactivate DB
+
+API --> DatasetPage: File name, type, tanggal
+deactivate API
+
+DatasetPage --> User: Tampilkan tabel dataset
+deactivate DatasetPage
+
+@enduml

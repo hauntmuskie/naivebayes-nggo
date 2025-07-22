@@ -1,0 +1,26 @@
+@startuml Classification History Activity Diagram
+title Activity Diagram - Laporan Hasil Klasifikasi
+
+|#LightBlue|Admin|
+start
+:Pilih menu Laporan;
+
+|#LightGreen|System|
+:Tampilkan daftar history;
+
+|Admin|
+if (Aksi yang dipilih?) then (Lihat Detail)
+    :Pilih history tertentu;
+    |System|
+    :Tampilkan detail hasil;
+elseif (Download Report) then
+    :Pilih laporan;
+    |System|
+    :Generate dan download;
+endif
+
+|Admin|
+:Lihat laporan;
+
+stop
+@enduml

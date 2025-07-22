@@ -1,0 +1,26 @@
+@startuml Dashboard Analytics
+title Dashboard Analytics
+
+actor User
+boundary Dashboard
+control API
+database DB
+
+User -> Dashboard: Buka halaman dashboard
+activate Dashboard
+
+Dashboard -> API: fetchStats()
+activate API
+
+API -> DB: Ambil data models dan metrics
+activate DB
+DB --> API: Data statistik
+deactivate DB
+
+API --> Dashboard: Total models, accuracy terbaik
+deactivate API
+
+Dashboard --> User: Tampilkan dashboard
+deactivate Dashboard
+
+@enduml

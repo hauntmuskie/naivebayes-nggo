@@ -1,0 +1,34 @@
+@startuml Reports Generation Activity Diagram
+title Activity Diagram - Generate Reports
+
+|#LightBlue|Admin|
+start
+:Akses halaman reports;
+
+|#LightGreen|System|
+:Tampilkan 4 jenis laporan:
+- Model Performance
+- Classification Results
+- Dataset Analysis
+- System Summary;
+
+|Admin|
+:Pilih jenis laporan;
+
+|System|
+:Generate laporan yang dipilih;
+:Tampilkan hasil laporan;
+
+|Admin|
+:Lihat detail laporan;
+
+if (Unduh laporan?) then (ya)
+    |System|
+    :Generate file PDF;
+    :Download laporan;
+else (tidak)
+    :Selesai melihat laporan;
+endif
+
+stop
+@enduml

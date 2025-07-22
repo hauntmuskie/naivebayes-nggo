@@ -13,10 +13,11 @@ export function TrainingDataUpload({
 }: TrainingDataUploadProps) {
   return (
     <div className="h-full flex flex-col">
+      {" "}
       <FileUpload
         accept=".csv"
-        label="Training Data"
-        description="Upload CSV with training data"
+        label="Data Pelatihan"
+        description="Upload CSV dengan data pelatihan"
         onFileChange={onFileChange}
         required={required}
         className={className}

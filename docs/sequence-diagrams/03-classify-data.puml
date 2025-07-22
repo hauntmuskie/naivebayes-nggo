@@ -1,0 +1,33 @@
+@startuml Classify Data
+title Classify Data
+
+actor User
+boundary ClassifyForm
+control API
+database DB
+
+User -> ClassifyForm: Upload CSV + pilih model
+activate ClassifyForm
+
+ClassifyForm -> API: classifyData(csvData, modelName)
+activate API
+
+API -> DB: Ambil model dan encoders
+activate DB
+DB --> API: Model data
+deactivate DB
+
+API -> API: Encode features, predict
+
+API -> DB: Simpan hasil klasifikasi
+activate DB
+DB --> API: History ID tersimpan
+deactivate DB
+
+API --> ClassifyForm: Hasil prediksi + confidence
+deactivate API
+
+ClassifyForm --> User: Tampilkan hasil klasifikasi
+deactivate ClassifyForm
+
+@enduml

@@ -1,0 +1,104 @@
+@startuml Class Diagram - Naive Bayes Classification System
+title Class Diagram - Naive Bayes Classification System
+
+' === MAIN CLASSES ===
+class Admin {
+  -id: string
+  -username: string
+  -password: string
+  +login(): boolean
+  +logout(): void
+}
+
+class Model {
+  -id: string
+  -modelName: string
+  -targetColumn: string
+  -featureColumns: string[]
+  -classes: string[]
+  -accuracy: number
+  -modelData: string
+  -encodersData: string
+  -labelEncoderData: string
+  -createdAt: Date
+  -updatedAt: Date
+  +trainModel(): void
+  +predict(data: any): string
+}
+
+class Classification {
+  -id: string
+  -modelId: string
+  -data: string
+  -predictedClass: string
+  -actualClass: string
+  -confidence: number
+  -createdAt: Date
+}
+
+class ModelMetrics {
+  -id: string
+  -modelId: string
+  -accuracy: number
+  -precision: number
+  -recall: number
+  -f1Score: number
+  -classMetrics: Record<string, any>
+  -confusionMatrix: number[][]
+  -createdAt: Date
+}
+
+class DatasetRecord {
+  -id: string
+  -recordId: string
+  -fileName: string
+  -datasetType: string
+  -rawData: Record<string, any>
+  -columns: string[]
+  -createdAt: Date
+  -updatedAt: Date
+  +uploadFile(): boolean
+  +validateFormat(): boolean
+}
+
+class ClassificationHistory {
+  -id: string
+  -fileName: string
+  -modelName: string
+  -totalRecords: number
+  -accuracy: number
+  -results: string
+  -createdAt: Date
+  +saveResults(): void
+  +viewDetails(): any
+}
+
+class Reports {
+  -id: string
+  -reportType: string
+  -title: string
+  -description: string
+  -generatedAt: Date
+  -format: string
+  +generateModelPerformance(): any
+  +generateClassificationResults(): any
+  +generateDatasetAnalysis(): any
+  +generateSystemSummary(): any
+  +exportToPDF(): boolean
+}
+
+' === RELATIONSHIPS ===
+Admin ||--o{ Model : "manages"
+Model ||--o{ Classification : "produces"
+Model ||--o{ ModelMetrics : "has"
+Admin ||--o{ DatasetRecord : "uploads"
+Admin ||--o{ ClassificationHistory : "views"
+Admin ||--o{ Reports : "accesses"
+Model ||--o{ ClassificationHistory : "recorded in"
+Model ||--o{ Reports : "analyzed in"
+Classification ||--o{ Reports : "reported in"
+DatasetRecord ||--o{ Reports : "analyzed in"
+Classification }o--|| Model : "belongs to"
+ModelMetrics }o--|| Model : "belongs to"
+
+@enduml

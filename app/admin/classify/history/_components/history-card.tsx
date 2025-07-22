@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +14,7 @@ import {
 } from "lucide-react";
 import { ClassificationHistorySelect } from "@/database/schema";
 import { format } from "date-fns";
+import { useConfirmationDialog } from "@/components/confirmation-dialog";
 
 interface HistoryCardProps {
   item: ClassificationHistorySelect;
@@ -24,10 +27,20 @@ export function HistoryCard({
   onDelete,
   isDeleting = false,
 }: HistoryCardProps) {
+  const { openDialog, ConfirmationDialog } = useConfirmationDialog();
+
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    onDelete(item.id);
+    
+    openDialog({
+      title: "Hapus Riwayat Klasifikasi",
+      description: `Apakah Anda yakin ingin menghapus riwayat klasifikasi untuk file "${item.fileName}"? Tindakan ini tidak dapat dibatalkan.`,
+      confirmText: "Hapus Riwayat",
+      cancelText: "Batal",
+      variant: "destructive",
+      onConfirm: () => onDelete(item.id),
+    });
   };
 
   const parsedResults = (() => {
@@ -61,35 +74,32 @@ export function HistoryCard({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-blue-500" />
-            <span className="text-sm text-muted-foreground">Processed</span>
+            <span className="text-sm text-muted-foreground">Diproses</span>
           </div>
           <span className="text-sm font-medium text-foreground">
             {format(item.createdAt, "MMM d, yyyy h:mm a")}
           </span>
         </div>
-
         <div className="flex items-center gap-2">
           <Target className="h-4 w-4 text-orange-500" />
-          <span className="text-sm text-muted-foreground">Records</span>
+          <span className="text-sm text-muted-foreground">Record</span>
           <span className="text-lg font-bold text-foreground ml-auto">
             {item.totalRecords.toLocaleString()}
           </span>
         </div>
-
         {item.accuracy && (
           <div className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-muted-foreground">Accuracy</span>
+            <span className="text-sm text-muted-foreground">Akurasi</span>
             <span className="text-lg font-bold text-green-600 ml-auto">
               {(item.accuracy * 100).toFixed(1)}%
             </span>
           </div>
         )}
-
         <div className="pt-2 border-t border-border/20">
           <div className="flex items-center justify-between">
             <div className="text-xs text-muted-foreground">
-              Predictions:{" "}
+              Prediksi:{" "}
               <span className="font-medium text-foreground">
                 {parsedResults.results?.length || 0}
               </span>
@@ -114,6 +124,7 @@ export function HistoryCard({
           </div>
         </div>
       </CardContent>
+      <ConfirmationDialog />
     </Card>
   );
 }

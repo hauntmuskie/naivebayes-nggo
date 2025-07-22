@@ -1,0 +1,45 @@
+@startuml Model Management
+title Model Management
+
+actor User
+boundary ModelPage
+control API
+database DB
+
+== Lihat Models ==
+User -> ModelPage: Buka catalog model
+activate ModelPage
+
+ModelPage -> API: fetchModels()
+activate API
+
+API -> DB: Ambil models dengan metrics
+activate DB
+DB --> API: Model + accuracy
+deactivate DB
+
+API --> ModelPage: List model cards
+deactivate API
+
+ModelPage --> User: Tampilkan model catalog
+deactivate ModelPage
+
+== Hapus Model ==
+User -> ModelPage: Klik delete model
+activate ModelPage
+
+ModelPage -> API: deleteModel(modelName)
+activate API
+
+API -> DB: Hapus model dan data terkait
+activate DB
+DB --> API: Model dihapus
+deactivate DB
+
+API --> ModelPage: Success message
+deactivate API
+
+ModelPage --> User: Update catalog
+deactivate ModelPage
+
+@enduml

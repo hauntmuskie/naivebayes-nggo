@@ -13,6 +13,13 @@
 # testing
 /coverage
 
+# drizzle
+drizzle
+
+# fastapi
+__pycache__/
+venv
+
 # next.js
 /.next/
 /out/

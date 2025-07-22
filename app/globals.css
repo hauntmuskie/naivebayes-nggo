@@ -203,3 +203,55 @@ select:focus {
   border-color: hsl(var(--ring));
   box-shadow: 0 0 0 1px hsl(var(--ring));
 }
+
+/* Print Styles */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  /* Ensure backgrounds print */
+  .bg-gradient-to-br,
+  .bg-gradient-to-r,
+  .bg-blue-50,
+  .bg-green-50,
+  .bg-purple-50,
+  .bg-orange-50,
+  .bg-emerald-50,
+  .bg-violet-50,
+  .bg-amber-50,
+  .bg-red-50 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Page breaks */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .page-break-inside {
+    page-break-inside: avoid;
+  }
+
+  /* Ensure charts and graphics print well */
+  canvas,
+  svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}

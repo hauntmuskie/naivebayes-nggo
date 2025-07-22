@@ -44,84 +44,92 @@ export function ConfusionMatrix({ metrics, classes }: ConfusionMatrixProps) {
       {!metrics.confusionMatrix || !classes ? null : (
         <Card className="w-full border border-muted">
           <CardHeader>
-            <CardTitle className="text-lg font-medium">Confusion Matrix</CardTitle>
+            <CardTitle className="text-lg font-medium">
+              Confusion Matrix
+            </CardTitle>
             <p className="text-sm text-muted-foreground">
               Actual vs Predicted classifications
             </p>
           </CardHeader>
-      <CardContent>
-        <div className="text-center mb-4">
-          <span className="text-sm font-medium text-muted-foreground">
-            Predicted
-          </span>
-        </div>
+          <CardContent>
+            <div className="text-center mb-4">
+              <span className="text-sm font-medium text-muted-foreground">
+                Predicted
+              </span>
+            </div>
 
-        <div className="flex items-start gap-4">
-          <div className="flex items-center h-full pt-8">
-            <span className="text-sm font-medium text-muted-foreground -rotate-90 whitespace-nowrap">
-              Actual
-            </span>
-          </div>
+            <div className="flex items-start gap-4">
+              <div className="flex items-center h-full pt-8">
+                <span className="text-sm font-medium text-muted-foreground -rotate-90 whitespace-nowrap">
+                  Actual
+                </span>
+              </div>
 
-          <div className="flex-1 overflow-x-auto">
-            <div className="min-w-max">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="bg-muted font-medium w-20 min-w-20"></TableHead>
-                    {classes.map((className, index) => (
-                      <TableHead
-                        key={index}
-                        className="bg-muted font-medium text-center min-w-20 max-w-24"
-                      >
-                        <div className="truncate" title={className}>
-                          {className}
-                        </div>
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {metrics.confusionMatrix.map((row, rowIndex) => {
-                    const rowTotal = row.reduce((sum: number, val: number) => sum + val, 0);
-                    return (
-                      <TableRow key={rowIndex}>
-                        <TableHead className="bg-muted font-medium min-w-20">
-                          <div className="truncate" title={classes[rowIndex]}>
-                            {classes[rowIndex]}
-                          </div>
-                        </TableHead>
-                        {row.map((cell: number, colIndex: number) => (
-                          <MatrixCell
-                            key={colIndex}
-                            value={cell}
-                            isCorrect={rowIndex === colIndex}
-                            percentage={formatPercentage(cell / rowTotal)}
-                          />
+              <div className="flex-1 overflow-x-auto">
+                <div className="min-w-max">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="bg-muted font-medium w-20 min-w-20"></TableHead>
+                        {classes.map((className, index) => (
+                          <TableHead
+                            key={index}
+                            className="bg-muted font-medium text-center min-w-20 max-w-24"
+                          >
+                            <div className="truncate" title={className}>
+                              {className}
+                            </div>
+                          </TableHead>
                         ))}
                       </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {metrics.confusionMatrix.map((row, rowIndex) => {
+                        const rowTotal = row.reduce(
+                          (sum: number, val: number) => sum + val,
+                          0
+                        );
+                        return (
+                          <TableRow key={rowIndex}>
+                            <TableHead className="bg-muted font-medium min-w-20">
+                              <div
+                                className="truncate"
+                                title={classes[rowIndex]}
+                              >
+                                {classes[rowIndex]}
+                              </div>
+                            </TableHead>
+                            {row.map((cell: number, colIndex: number) => (
+                              <MatrixCell
+                                key={colIndex}
+                                value={cell}
+                                isCorrect={rowIndex === colIndex}
+                                percentage={formatPercentage(cell / rowTotal)}
+                              />
+                            ))}
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="mt-6 text-xs text-muted-foreground">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <div className="w-3 h-3 bg-green-900/30 border border-border"></div>
-              <span>Correct predictions</span>
+            <div className="mt-6 text-xs text-muted-foreground">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-3 bg-green-900/30 border border-border"></div>
+                  <span>Correct predictions</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-3 h-3 bg-red-900/30 border border-border"></div>
+                  <span>Incorrect predictions</span>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="w-3 h-3 bg-red-900/30 border border-border"></div>
-              <span>Incorrect predictions</span>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
       )}
     </>
   );

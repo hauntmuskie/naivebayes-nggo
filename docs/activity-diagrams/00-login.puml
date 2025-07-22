@@ -1,0 +1,25 @@
+@startuml Login Activity Diagram
+title Activity Diagram - Login Admin
+
+|#LightBlue|Admin|
+start
+:Akses website;
+
+|#LightGreen|System|
+:Tampilkan halaman login;
+
+|Admin|
+:Input username & password;
+:Klik "Login";
+
+|System|
+if (Kredensial valid?) then (ya)
+    :Redirect ke dashboard;
+    stop
+else (tidak)
+    :Tampilkan pesan error;
+    |Admin|
+    :Input ulang kredensial;
+endif
+
+@enduml

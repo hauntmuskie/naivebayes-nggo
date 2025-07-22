@@ -1,0 +1,24 @@
+@startuml Dashboard Analytics Activity Diagram
+title Activity Diagram - Dashboard Analitik
+
+|#LightBlue|Admin|
+start
+:Pilih menu Dashboard;
+
+|#LightGreen|System|
+:Tampilkan loading state;
+:Memuat data statistik;
+
+if (Data tersedia?) then (ya)
+    :Tampilkan grafik dan visualisasi;
+    :Tampilkan metrik performa;
+    :Tampilkan statistik ringkasan;
+else (tidak)
+    :Tampilkan pesan "Data tidak tersedia";
+endif
+
+|Admin|
+:Lihat overview metrics;
+
+stop
+@enduml

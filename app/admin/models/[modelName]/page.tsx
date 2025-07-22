@@ -1,5 +1,5 @@
 import { fetchModels } from "@/_actions";
-import { MetricsCard } from "@/components/metrics-card";
+import { MetricsCard } from "@/app/admin/models/_components/metrics-card";
 import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
@@ -52,19 +52,17 @@ export default async function ModelDetailPage({
           className="h-8 w-8 flex-shrink-0"
           asChild
         >
-          <Link href="/admin/models/catalog">
+          <Link href="/admin/models">
             <ChevronLeft size={18} />
           </Link>
         </Button>
         <div className="flex items-center gap-4 flex-1">
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">
             {model.modelName}
-          </h1>
+          </h1>{" "}
           <Button className="ml-auto" asChild>
             <Link
-              href={`/admin/classify?model=${encodeURIComponent(
-                model.modelName
-              )}`}
+              href={`/classify?model=${encodeURIComponent(model.modelName)}`}
             >
               Klasifikasi Data
             </Link>

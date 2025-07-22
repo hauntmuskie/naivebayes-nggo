@@ -125,13 +125,13 @@ export function ClassifyForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file || !selectedModel) {
-      setError("Please select a model and upload a file");
+      setError("Harap pilih model dan unggah file");
       return;
     }
 
     if (!models.some((m) => m.modelName === selectedModel)) {
       setError(
-        `Model "${selectedModel}" not found. Please select an existing model.`
+        `Model "${selectedModel}" tidak ditemukan. Harap pilih model yang ada.`
       );
       return;
     }
@@ -139,7 +139,7 @@ export function ClassifyForm({
     const validation = await validateCsvColumns(file);
     if (!validation.valid && validation.missingColumns) {
       setMissingColumns(validation.missingColumns);
-      setError(`Missing required feature columns in the CSV file`);
+      setError(`Kolom fitur yang diperlukan tidak ada dalam file CSV`);
       return;
     }
 
@@ -159,16 +159,15 @@ export function ClassifyForm({
         selectedModel,
         file.name
       );
-
-      toast.success("Classification completed successfully!", {
-        description: `Classified ${
+      toast.success("Klasifikasi berhasil diselesaikan!", {
+        description: `Berhasil mengklasifikasi ${
           classificationResults.results?.length || 0
-        } records using model "${selectedModel}".`,
+        } record menggunakan model "${selectedModel}".`,
       });
 
       router.push(`/admin/classify/history/${historyId}`);
-    } catch (err: unknown) {
-      let errorMessage = (err as Error).message || "Classification failed";
+    } catch (err: any) {
+      let errorMessage = err.message || "Klasifikasi gagal";
       let missingCols: string[] = [];
 
       try {
@@ -199,7 +198,7 @@ export function ClassifyForm({
       <CardHeader className="pb-3 border-b border-border">
         <CardTitle className="flex items-center gap-2 font-medium text-base sm:text-lg">
           <Target className="h-4 w-4 sm:h-5 sm:w-5" />
-          Classification Setup
+          Pengaturan Klasifikasi
         </CardTitle>
       </CardHeader>
       <CardContent className="p-3 sm:p-4">
@@ -218,25 +217,24 @@ export function ClassifyForm({
 
             {/* Right column - File upload */}
             <div className="lg:w-3/5 h-full">
+              {" "}
               <FileUpload
                 accept=".csv"
-                label="Data Upload"
-                description="Your CSV file should contain the same feature columns as used during training"
+                label="Unggah Data"
+                description="File CSV Anda harus berisi kolom fitur yang sama seperti yang digunakan saat pelatihan"
                 onFileChange={handleFileChange}
                 required
               />
             </div>
           </div>
         </form>
-
-        <ErrorDisplay error={error} missingColumns={missingColumns} />
-
+        <ErrorDisplay error={error} missingColumns={missingColumns} />{" "}
         <SubmitButton
           isLoading={classifyLoading}
           disabled={classifyLoading || !selectedModel || !file}
           onSubmit={handleSubmit}
-          loadingText="Classifying Data..."
-          submitText="Classify Data"
+          loadingText="Memproses Klasifikasi..."
+          submitText="Klasifikasi Data"
           icon={Target}
           className="w-full mt-4 sm:mt-6 rounded-none font-normal border border-border hover:bg-accent text-foreground bg-secondary"
         />

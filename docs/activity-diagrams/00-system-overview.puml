@@ -1,0 +1,54 @@
+@startuml System Overview Activity Diagram
+title Activity Diagram - System Overview
+
+|#LightBlue|Admin|
+start
+:Akses website melalui browser;
+
+|#LightGreen|System|
+:Tampilkan halaman login;
+
+|Admin|
+:Login ke sistem;
+
+|System|
+if (Autentikasi berhasil?) then (ya)
+    :Tampilkan dashboard utama;
+    
+    |Admin|
+    while (Pilih menu?) is (ya)
+        if (Menu yang dipilih?) then (Dashboard)
+            :Lihat analytics dan metrics;
+        elseif (Train Model) then
+            :Upload dataset dan latih model;
+        elseif (Classify Data) then
+            :Klasifikasi data penumpang;
+        elseif (Model Management) then
+            :Kelola model yang ada;
+        elseif (Dataset Management) then
+            :Lihat data penumpang;
+        elseif (Classification History) then
+            :Lihat riwayat klasifikasi;
+        elseif (Logout) then
+            :Keluar dari sistem;
+            stop
+        endif
+    endwhile (tidak)
+    
+    :Logout;
+    stop
+else (tidak)
+    :Tampilkan pesan error;
+    :Kembali ke halaman login;
+endif
+
+note right
+  Sistem Klasifikasi Naive Bayes:
+  - Login authentication
+  - Model training & management
+  - Data classification
+  - Analytics dashboard
+  - History tracking
+end note
+
+@enduml

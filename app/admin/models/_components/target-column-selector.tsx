@@ -26,20 +26,22 @@ export function TargetColumnSelector({
 }: TargetColumnSelectorProps) {
   return (
     <div>
+      {" "}
       <Label
         htmlFor="target-column"
         className="text-sm font-medium flex items-center gap-2"
       >
         <Target className="h-4 w-4" />
-        Target Column {required && <span className="text-red-500">*</span>}
+        Kolom Target {required && <span className="text-red-500">*</span>}
       </Label>
       {columns.length > 0 ? (
         <Select value={value} onValueChange={onChange}>
+          {" "}
           <SelectTrigger
             id="target-column"
             className="w-full mt-1.5 rounded-none bg-input focus-visible:ring-0 border-border text-sm"
           >
-            <SelectValue placeholder="Select target column" />
+            <SelectValue placeholder="Pilih kolom target" />
           </SelectTrigger>
           <SelectContent>
             {columns.map((column) => (
@@ -52,16 +54,16 @@ export function TargetColumnSelector({
       ) : (
         <Input
           id="target-column"
-          placeholder="Upload CSV to select columns"
+          placeholder="Upload CSV untuk memilih kolom"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required={required}
           disabled={!hasFile}
           className="mt-1.5 rounded-none bg-input focus-visible:ring-0 border-border text-sm"
         />
-      )}
+      )}{" "}
       <p className="mt-1 text-xs text-muted-foreground">
-        The column containing class labels
+        Kolom yang berisi label kelas
       </p>
     </div>
   );

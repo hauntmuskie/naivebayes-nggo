@@ -22,14 +22,13 @@ export function FeatureColumnSelector({
   if (columns.length === 0) return null;
 
   return (
-    <div className="mt-4 sm:mt-5">
-      <Label className="text-sm font-medium flex items-center justify-between gap-2">
+    <div className="mt-4 sm:mt-5">      <Label className="text-sm font-medium flex items-center justify-between gap-2">
         <span className="flex items-center gap-2">
           <CheckSquare className="h-4 w-4" />
-          Feature Columns {required && <span className="text-red-500">*</span>}
+          Kolom Fitur {required && <span className="text-red-500">*</span>}
         </span>
         <span className="text-xs text-muted-foreground">
-          {selectedCount} selected
+          {selectedCount} terpilih
         </span>
       </Label>
       <div className="mt-2 max-h-[150px] sm:max-h-[200px] overflow-y-auto border border-border rounded-sm bg-input p-2">
@@ -55,8 +54,7 @@ export function FeatureColumnSelector({
                   isTarget ? "line-through text-muted-foreground" : ""
                 }`}
               >
-                {column}
-                {isTarget && (
+                {column}                {isTarget && (
                   <span className="ml-2 text-xs text-muted-foreground">
                     (target)
                   </span>
@@ -65,9 +63,8 @@ export function FeatureColumnSelector({
             </div>
           );
         })}
-      </div>
-      <p className="mt-1 text-xs text-muted-foreground">
-        Select columns to use as features for training
+      </div>      <p className="mt-1 text-xs text-muted-foreground">
+        Pilih kolom yang akan digunakan sebagai fitur untuk pelatihan
       </p>
     </div>
   );

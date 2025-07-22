@@ -31,7 +31,7 @@ export default async function ModelsPage() {
           text: `${models.length} model${
             models.length !== 1 ? "" : ""
           } terlatih`,
-          variant: models.length > 0 ? "default" : "secondary",
+          variant: models.length > 0 ? "success" : "secondary",
         }}
       />
 

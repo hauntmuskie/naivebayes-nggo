@@ -7,19 +7,24 @@ interface ModelNameInputProps {
   required?: boolean;
 }
 
-export function ModelNameInput({ value, onChange, required = true }: ModelNameInputProps) {
+export function ModelNameInput({
+  value,
+  onChange,
+  required = true,
+}: ModelNameInputProps) {
   return (
     <div>
+      {" "}
       <label
         htmlFor="model-name"
         className="text-sm font-medium flex items-center gap-2"
       >
         <Brain className="h-4 w-4" />
-        Model Name {required && <span className="text-red-500">*</span>}
+        Nama Model {required && <span className="text-red-500">*</span>}
       </label>
       <Input
         id="model-name"
-        placeholder="Enter a unique model name"
+        placeholder="Masukkan nama model yang unik"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required={required}

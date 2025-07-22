@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 
 import { useState } from "react";
 import { Download, CheckCircle, FileText, Trash2 } from "lucide-react";
+import { useConfirmationDialog } from "@/components/confirmation-dialog";
 
 interface FileUploadProps {
   accept: string;
@@ -26,6 +27,7 @@ export function FileUpload({
 }: FileUploadProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const { openDialog, ConfirmationDialog } = useConfirmationDialog();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -56,7 +58,8 @@ export function FileUpload({
     setIsDragging(false);
 
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const file = e.dataTransfer.files[0];      if (
+      const file = e.dataTransfer.files[0];
+      if (
         accept &&
         !file.name.toLowerCase().endsWith(accept.replace(".", ""))
       ) {
@@ -105,7 +108,8 @@ export function FileUpload({
                 <div className="p-4 bg-muted rounded-full">
                   <Download className="h-8 w-8 text-muted-foreground" />
                 </div>
-              </div>              <div className="space-y-2">
+              </div>{" "}
+              <div className="space-y-2">
                 <p className="text-foreground font-medium">
                   Letakkan file Anda di sini, atau klik untuk memilih
                 </p>
@@ -120,7 +124,8 @@ export function FileUpload({
                 <div className="p-4 bg-green-950/20 rounded-full">
                   <CheckCircle className="h-8 w-8 text-green-400" />
                 </div>
-              </div>              <div className="space-y-2">
+              </div>{" "}
+              <div className="space-y-2">
                 <p className="font-medium text-green-400">
                   File berhasil diunggah
                 </p>
@@ -136,8 +141,17 @@ export function FileUpload({
                 className="text-red-400 hover:text-red-300 hover:bg-red-950/20"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedFile(null);
-                  onFileChange(null);
+                  openDialog({
+                    title: "Hapus File",
+                    description: `Apakah Anda yakin ingin menghapus file "${selectedFile?.name}"? File yang telah dihapus perlu diunggah ulang.`,
+                    confirmText: "Hapus File",
+                    cancelText: "Batal",
+                    variant: "destructive",
+                    onConfirm: () => {
+                      setSelectedFile(null);
+                      onFileChange(null);
+                    },
+                  });
                 }}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -147,6 +161,7 @@ export function FileUpload({
           )}
         </div>
       </div>
+      <ConfirmationDialog />
     </div>
   );
 }

@@ -1,0 +1,36 @@
+@startuml Train Model Activity Diagram
+title Activity Diagram - Pelatihan Model Naive Bayes
+
+|#LightBlue|Admin|
+start
+:Pilih menu Pelatihan Model;
+:Input nama model;
+:Upload dataset CSV;
+
+|#LightGreen|System|
+if (Dataset valid?) then (ya)
+    :Tampilkan preview data;
+    :Analisis kolom dataset;
+else (tidak)
+    :Tampilkan pesan error;
+    |Admin|
+    :Upload dataset ulang;
+endif
+
+|Admin|
+:Pilih target column;
+:Pilih feature columns;
+:Konfirmasi konfigurasi;
+
+|System|
+:Mulai proses training;
+:Latih model dengan algoritma;
+:Hitung metrik performa;
+:Simpan model;
+:Tampilkan hasil training;
+
+|Admin|
+:Lihat hasil training;
+
+stop
+@enduml

@@ -29,7 +29,7 @@ export default async function ClassifyHistoryPage() {
           text: `${history.length} klasifikasi${
             history.length !== 1 ? "" : ""
           }`,
-          variant: history.length > 0 ? "default" : "secondary",
+          variant: history.length > 0 ? "success" : "secondary",
         }}
         action={<HistoryActions hasHistory={hasHistory} />}
       />

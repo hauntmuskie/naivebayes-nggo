@@ -21,7 +21,7 @@ export default async function ClassifyDataPage({
           text: `${models.length} model${
             models.length !== 1 ? "" : ""
           } tersedia`,
-          variant: models.length > 0 ? "default" : "secondary",
+          variant: models.length > 0 ? "success" : "secondary",
         }}
       />
 
@@ -31,7 +31,7 @@ export default async function ClassifyDataPage({
           description="Anda perlu melatih setidaknya satu model sebelum dapat mengklasifikasi data. Mulai dengan membuat model pertama Anda."
           action={{
             label: "Latih Model Pertama Anda",
-            href: "/models",
+            href: "/admin/models",
           }}
         />
       ) : (

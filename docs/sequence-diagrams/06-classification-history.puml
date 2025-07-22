@@ -1,0 +1,45 @@
+@startuml Classification History
+title Classification History
+
+actor User
+boundary HistoryPage
+control API
+database DB
+
+== Lihat History ==
+User -> HistoryPage: Buka halaman history
+activate HistoryPage
+
+HistoryPage -> API: fetchClassificationHistory()
+activate API
+
+API -> DB: Ambil semua classification history
+activate DB
+DB --> API: History records
+deactivate DB
+
+API --> HistoryPage: File name, model, accuracy
+deactivate API
+
+HistoryPage --> User: Tampilkan grid history
+deactivate HistoryPage
+
+== Hapus History ==
+User -> HistoryPage: Klik delete history
+activate HistoryPage
+
+HistoryPage -> API: deleteHistory(id)
+activate API
+
+API -> DB: Hapus record classification
+activate DB
+DB --> API: Record dihapus
+deactivate DB
+
+API --> HistoryPage: Success message
+deactivate API
+
+HistoryPage --> User: Update grid history
+deactivate HistoryPage
+
+@enduml

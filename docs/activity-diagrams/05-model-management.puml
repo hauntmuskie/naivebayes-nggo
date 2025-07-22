@@ -1,0 +1,91 @@
+@startuml Model Management Activity Diagram
+title Activity Diagram - Kelola Model
+
+|#LightBlue|Admin|
+start
+:Pilih menu Models;
+
+|#LightGreen|System|
+|System|
+:Tampilkan model catalog;
+
+|Admin|
+if (Aksi yang dipilih?) then (Lihat Detail Model)
+    :Pilih model tertentu;
+    |System|
+    :Tampilkan detail dan metrics;
+elseif (Hapus Model) then
+    :Pilih model untuk dihapus;
+    |System|
+    :Konfirmasi dan hapus model;
+endif
+
+|Admin|
+:Lihat status model;
+
+stop
+@enduml
+
+if (Lihat model catalog?) then (ya)
+  :Admin pilih "Model Catalog";
+  :Sistem menampilkan daftar semua model;
+  
+  fork
+    :Tampilkan model cards;
+    :Tampilkan model name;
+    :Tampilkan accuracy percentage;
+    :Tampilkan created date;
+  fork again
+    :Tampilkan target column;
+    :Tampilkan jumlah features;
+    :Tampilkan model performance;
+  end fork
+  
+  if (Admin pilih model tertentu?) then (ya)
+    :Admin klik model card;
+    :Sistem navigasi ke detail model;
+    
+    :Sistem tampilkan detail model:;
+    :- Model name;
+    :- Performance metrics;
+    :- Confusion matrix;
+    :- Class-wise metrics;
+    
+    :Admin dapat akses "Classify Data";
+    
+  endif
+  
+  if (Admin ingin hapus model?) then (ya)
+    :Admin klik tombol delete;
+    :Sistem tampilkan konfirmasi;
+    
+    if (Konfirmasi delete?) then (ya)
+      :Sistem hapus model dari database;
+      :Sistem hapus related metrics;
+      :Sistem hapus related classifications;
+      :Sistem refresh model list;
+      
+      :Tampilkan pesan sukses;
+    else (tidak)
+      :Batalkan penghapusan;
+    endif
+  endif
+  
+else (train new model)
+  :Admin tetap di halaman Train Models;
+  :Sistem tampilkan form training;
+  :Sistem tampilkan existing models count;
+endif
+
+note right
+  Model Management features:
+  - View all trained models
+  - Model performance overview
+  - Delete existing models
+  - Navigate to model details
+  - Quick access to classification
+end note
+
+stop
+
+@enduml

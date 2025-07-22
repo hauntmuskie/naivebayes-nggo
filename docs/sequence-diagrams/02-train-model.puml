@@ -1,0 +1,28 @@
+@startuml Train Model
+title Train Model
+
+actor User
+boundary TrainForm
+control API
+database DB
+
+User -> TrainForm: Upload CSV + pilih kolom
+activate TrainForm
+
+TrainForm -> API: trainModel(data, columns)
+activate API
+
+API -> API: Parse CSV, train Naive Bayes
+
+API -> DB: Simpan model dan metrics
+activate DB
+DB --> API: Model ID tersimpan
+deactivate DB
+
+API --> TrainForm: Training berhasil
+deactivate API
+
+TrainForm --> User: Redirect ke detail model
+deactivate TrainForm
+
+@enduml

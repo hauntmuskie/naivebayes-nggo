@@ -101,7 +101,7 @@ export function TrainForm() {
       }
     } catch (err) {
       console.error("Error parsing CSV:", err);
-      updateState({ error: "Error parsing CSV file" });
+      updateState({ error: "Error saat memproses file CSV" });
     } finally {
       updateState({ isParsingCsv: false });
     }
@@ -109,14 +109,13 @@ export function TrainForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!isFormValid) {
-      updateState({ error: "Please fill in all required fields" });
+      updateState({ error: "Mohon isi semua field yang diperlukan" });
       return;
     }
 
     if (selectedFeaturesList.length === 0) {
-      updateState({ error: "Please select at least one feature column" });
+      updateState({ error: "Mohon pilih setidaknya satu kolom fitur" });
       return;
     }
 
@@ -128,14 +127,13 @@ export function TrainForm() {
       formData.append("model_name", state.modelName);
       formData.append("target_column", state.targetColumn);
       formData.append("feature_columns", JSON.stringify(selectedFeaturesList));
-
       const result = await trainModel(formData);
-      toast.success("Model trained successfully!", {
-        description: `Model "${state.modelName}" has been trained and is ready to use.`,
+      toast.success("Model berhasil dilatih!", {
+        description: `Model "${state.modelName}" telah dilatih dan siap digunakan.`,
       });
       router.push(`/admin/models/${encodeURIComponent(result.modelName)}`);
-    } catch (err: unknown) {
-      updateState({ error: (err as Error).message || "Failed to train model" });
+    } catch (err: any) {
+      updateState({ error: err.message || "Gagal melatih model" });
     } finally {
       updateState({ isLoading: false });
     }
@@ -167,8 +165,9 @@ export function TrainForm() {
   return (
     <Card className="border-0 shadow-sm overflow-hidden">
       <CardHeader className="pb-3 border-b border-border">
+        {" "}
         <CardTitle className="font-medium text-base sm:text-lg">
-          Train New Model
+          Latih Model Baru
         </CardTitle>
       </CardHeader>
       <CardContent className="p-3 sm:p-4">
@@ -202,14 +201,13 @@ export function TrainForm() {
               <TrainingDataUpload onFileChange={handleFileChange} />
             </div>
           </div>
-        </form>
-
+        </form>{" "}
         <SubmitButton
           isLoading={state.isLoading}
           disabled={state.isLoading || state.isParsingCsv || !isFormValid}
           onSubmit={handleSubmit}
-          loadingText={state.isParsingCsv ? "Parsing CSV..." : "Training..."}
-          submitText="Train Model"
+          loadingText={state.isParsingCsv ? "Memproses CSV..." : "Melatih..."}
+          submitText="Latih Model"
           icon={Brain}
           className="w-full mt-4 sm:mt-6 rounded-none font-normal border border-border hover:bg-accent text-foreground bg-secondary"
         />

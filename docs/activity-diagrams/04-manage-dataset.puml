@@ -1,0 +1,25 @@
+@startuml Manage Dataset Activity Diagram
+title Activity Diagram - Lihat Data Penumpang
+
+|#LightBlue|Admin|
+start
+:Pilih menu Data Penumpang;
+
+|#LightGreen|System|
+:Tampilkan daftar data;
+
+|Admin|
+if (Ingin filter?) then (ya)
+    :Pilih filter;
+    |System|
+    :Tampilkan data terfilter;
+else (tidak)
+    |System|
+    :Tampilkan semua data;
+endif
+
+|Admin|
+:Lihat data;
+
+stop
+@enduml

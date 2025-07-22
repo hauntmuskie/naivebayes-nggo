@@ -12,13 +12,13 @@ export function ModelPerformanceCard({ model }: ModelPerformanceCardProps) {
     <div className="space-y-2">
       <label className="text-sm font-medium flex items-center gap-2">
         <BarChart3 className="h-4 w-4" />
-        Model Performance
+        Performa Model
       </label>
       <div className="p-3 bg-muted/50 rounded-lg">
         <div className="text-xl sm:text-2xl font-bold text-green-400">
           {(model.accuracy * 100).toFixed(1)}%
         </div>
-        <div className="text-xs text-muted-foreground">Model Accuracy</div>
+        <div className="text-xs text-muted-foreground">Akurasi Model</div>
       </div>
     </div>
   );

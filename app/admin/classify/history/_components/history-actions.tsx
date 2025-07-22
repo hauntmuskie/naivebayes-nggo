@@ -18,10 +18,10 @@ export function HistoryActions({ hasHistory }: HistoryActionsProps) {
     setRefreshing(true);
     try {
       router.refresh();
-      toast.success("History refreshed successfully");
+      toast.success("Riwayat berhasil disegarkan");
     } catch (error) {
       console.error("Error refreshing history:", error);
-      toast.error("Failed to refresh history");
+      toast.error("Gagal menyegarkan riwayat");
     } finally {
       setRefreshing(false);
     }
@@ -37,10 +37,11 @@ export function HistoryActions({ hasHistory }: HistoryActionsProps) {
       disabled={refreshing}
       className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
     >
+      {" "}
       <RefreshCw
         className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`}
       />
-      Refresh
+      Segarkan
     </Button>
   );
 }

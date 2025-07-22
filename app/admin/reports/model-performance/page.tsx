@@ -1,344 +1,400 @@
 import { fetchModels } from "@/_actions";
+import { ReportLayout } from "@/app/admin/reports/_components/report-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import {
-  BarChart3,
-  TrendingUp,
-  Calendar,
-  Target,
-  CheckCircle,
-} from "lucide-react";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
+import { BarChart3, Target, TrendingUp, CheckCircle } from "lucide-react";
+import { Metadata } from "next";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
+export const dynamic = "force-static";
 
-interface SearchParams {
-  print?: string;
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Laporan Performa Model - Pengklasifikasi Naive Bayes",
+    description:
+      "Laporan analisis performa model Naive Bayes untuk klasifikasi kepuasan penumpang",
+  };
 }
 
-export default async function ModelPerformanceReportPage({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const params = await searchParams;
-  const isPrintMode = params.print === "true";
-
+export default async function ModelPerformancePage() {
   const models = await fetchModels();
 
-  const totalModels = models.length;
   const avgAccuracy =
     models.length > 0
       ? (models.reduce((sum, model) => sum + model.accuracy, 0) /
           models.length) *
         100
       : 0;
-  const bestModel =
-    models.length > 0
-      ? models.reduce((best, current) =>
-          current.accuracy > best.accuracy ? current : best
-        )
-      : null;
-  const worstModel =
-    models.length > 0
-      ? models.reduce((worst, current) =>
-          current.accuracy < worst.accuracy ? current : worst
-        )
-      : null;
 
-  const reportDate = format(new Date(), "dd MMMM yyyy", { locale: id });
-  const reportTime = format(new Date(), "HH:mm:ss");
+  const topPerformingModel = models.reduce(
+    (best, current) => (current.accuracy > best.accuracy ? current : best),
+    models[0] || { accuracy: 0, modelName: "N/A" }
+  );
 
-  if (isPrintMode) {
-    return (
-      <div className="min-h-screen bg-white p-8 print:p-0">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Header */}
-          <div className="text-center border-b border-gray-300 pb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              LAPORAN PERFORMA MODEL NAIVE BAYES
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Sistem Klasifikasi Kepuasan Penumpang
-            </p>
-            <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
-              <span>Tanggal: {reportDate}</span>
-              <span>Waktu: {reportTime}</span>
-            </div>
-          </div>
-
-          {/* Summary Statistics */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border border-gray-300 p-4">
-              <h3 className="font-semibold text-gray-900">Total Model</h3>
-              <p className="text-2xl font-bold text-blue-600">{totalModels}</p>
-            </div>
-            <div className="border border-gray-300 p-4">
-              <h3 className="font-semibold text-gray-900">Rata-rata Akurasi</h3>
-              <p className="text-2xl font-bold text-green-600">
-                {avgAccuracy.toFixed(2)}%
-              </p>
-            </div>
-          </div>
-
-          {/* Best and Worst Models */}
-          {bestModel && worstModel && (
-            <div className="grid grid-cols-2 gap-4">
-              <div className="border border-gray-300 p-4">
-                <h3 className="font-semibold text-green-700">Model Terbaik</h3>
-                <p className="font-medium">{bestModel.modelName}</p>
-                <p className="text-sm text-gray-600">
-                  Akurasi: {(bestModel.accuracy * 100).toFixed(2)}%
-                </p>
-              </div>
-              <div className="border border-gray-300 p-4">
-                <h3 className="font-semibold text-red-700">Model Terlemah</h3>
-                <p className="font-medium">{worstModel.modelName}</p>
-                <p className="text-sm text-gray-600">
-                  Akurasi: {(worstModel.accuracy * 100).toFixed(2)}%
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Models Table */}
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Detail Model
-            </h3>
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="border border-gray-300 p-2 text-left">No</th>
-                  <th className="border border-gray-300 p-2 text-left">
-                    Nama Model
-                  </th>
-                  <th className="border border-gray-300 p-2 text-left">
-                    Target
-                  </th>
-                  <th className="border border-gray-300 p-2 text-left">
-                    Jumlah Fitur
-                  </th>
-                  <th className="border border-gray-300 p-2 text-left">
-                    Akurasi
-                  </th>
-                  <th className="border border-gray-300 p-2 text-left">
-                    Tanggal Dibuat
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {models.map((model, index) => (
-                  <tr key={model.id}>
-                    <td className="border border-gray-300 p-2">{index + 1}</td>
-                    <td className="border border-gray-300 p-2">
-                      {model.modelName}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {model.targetColumn}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {model.featureColumns.length}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {(model.accuracy * 100).toFixed(2)}%
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {format(new Date(model.createdAt), "dd/MM/yyyy", {
-                        locale: id,
-                      })}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center text-sm text-gray-500 border-t border-gray-300 pt-4">
-            <p>
-              Laporan ini dibuat secara otomatis oleh Sistem Klasifikasi Naive
-              Bayes
-            </p>
-            <p>© 2025 - Naive Bayes Classifier System</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const modelsByPerformance = models.sort((a, b) => b.accuracy - a.accuracy);
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Laporan Performa Model</h1>
-          <p className="text-muted-foreground">
-            Analisis lengkap performa semua model Naive Bayes
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button asChild>
-            <a href="/admin/reports/model-performance?print=true" target="_blank">
-              <BarChart3 className="h-4 w-4 mr-2" />
-              Cetak Laporan
-            </a>
-          </Button>
-        </div>
-      </div>
-
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-blue-500" />
-              <span className="text-sm font-medium">Total Model</span>
-            </div>
-            <div className="text-2xl font-bold mt-1">{totalModels}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-500" />
-              <span className="text-sm font-medium">Rata-rata Akurasi</span>
-            </div>
-            <div className="text-2xl font-bold mt-1">
-              {avgAccuracy.toFixed(2)}%
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-emerald-500" />
-              <span className="text-sm font-medium">Model Terbaik</span>
-            </div>
-            <div className="text-lg font-bold mt-1">
-              {bestModel ? (bestModel.accuracy * 100).toFixed(2) + "%" : "N/A"}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-purple-500" />
-              <span className="text-sm font-medium">Tanggal Laporan</span>
-            </div>
-            <div className="text-sm font-medium mt-1">{reportDate}</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Best and Worst Models */}
-      {bestModel && worstModel && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-green-700 flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                Model Terbaik
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <p className="font-semibold">{bestModel.modelName}</p>
-                <p className="text-sm text-muted-foreground">
-                  Target: {bestModel.targetColumn}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Fitur: {bestModel.featureColumns.length} kolom
-                </p>
-                <Badge
-                  variant="default"
-                  className="bg-green-100 text-green-800"
-                >
-                  Akurasi: {(bestModel.accuracy * 100).toFixed(2)}%
-                </Badge>
+    <ReportLayout
+      title="LAPORAN PERFORMA MODEL NAIVE BAYES"
+      subtitle="Analisis Komprehensif Performa Model Klasifikasi Kepuasan Penumpang"
+    >
+      {/* Performance Overview */}
+      <section className="mb-8">
+        <h2 className="text-xl font-bold mb-4 text-gray-800">
+          IKHTISAR PERFORMA
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-500 rounded-lg">
+                  <BarChart3 className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <div className="text-sm text-blue-700 font-medium">
+                    Total Model
+                  </div>
+                  <div className="text-2xl font-bold text-blue-800">
+                    {models.length}
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-orange-700 flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                Model Perlu Perbaikan
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <p className="font-semibold">{worstModel.modelName}</p>
-                <p className="text-sm text-muted-foreground">
-                  Target: {worstModel.targetColumn}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Fitur: {worstModel.featureColumns.length} kolom
-                </p>
-                <Badge
-                  variant="secondary"
-                  className="bg-orange-100 text-orange-800"
-                >
-                  Akurasi: {(worstModel.accuracy * 100).toFixed(2)}%
-                </Badge>
+          <Card className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-emerald-500 rounded-lg">
+                  <Target className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <div className="text-sm text-emerald-700 font-medium">
+                    Akurasi Rata-rata
+                  </div>
+                  <div className="text-2xl font-bold text-emerald-800">
+                    {avgAccuracy.toFixed(2)}%
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-violet-50 to-violet-100 border-violet-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-violet-500 rounded-lg">
+                  <TrendingUp className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <div className="text-sm text-violet-700 font-medium">
+                    Model Terbaik
+                  </div>
+                  <div className="text-xl font-bold text-violet-800">
+                    {(topPerformingModel.accuracy * 100).toFixed(2)}%
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-amber-50 to-amber-100 border-amber-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-amber-500 rounded-lg">
+                  <CheckCircle className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <div className="text-sm text-amber-700 font-medium">
+                    Model Aktif
+                  </div>
+                  <div className="text-2xl font-bold text-amber-800">
+                    {models.filter((m) => m.accuracy > 0.7).length}
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
-      )}
+      </section>
 
-      {/* Models List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Detail Semua Model</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {models.map((model, index) => (
-              <div key={model.id}>
-                <div className="flex items-center justify-between p-4 rounded-lg border">
-                  <div className="space-y-1">
-                    <h3 className="font-semibold">{model.modelName}</h3>
-                    <div className="flex gap-4 text-sm text-muted-foreground">
-                      <span>Target: {model.targetColumn}</span>
-                      <span>Fitur: {model.featureColumns.length}</span>
-                      <span>Kelas: {model.classes.length}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Dibuat:{" "}
-                      {format(new Date(model.createdAt), "dd MMMM yyyy", {
-                        locale: id,
+      {/* Detailed Model Performance */}
+      <section className="mb-8">
+        <h2 className="text-xl font-bold mb-4 text-gray-800">
+          DETAIL PERFORMA MODEL
+        </h2>
+        <div className="space-y-4">
+          {modelsByPerformance.map((model, index) => (
+            <Card
+              key={model.id}
+              className={`border shadow-md ${
+                index === 0
+                  ? "bg-gradient-to-r from-green-50 to-emerald-50 border-emerald-200"
+                  : model.accuracy > 0.8
+                  ? "bg-gradient-to-r from-blue-50 to-blue-50 border-blue-200"
+                  : model.accuracy > 0.7
+                  ? "bg-gradient-to-r from-yellow-50 to-amber-50 border-amber-200"
+                  : "bg-gradient-to-r from-red-50 to-rose-50 border-rose-200"
+              }`}
+            >
+              <CardHeader className="pb-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle
+                      className={`text-lg ${
+                        index === 0
+                          ? "text-emerald-800"
+                          : model.accuracy > 0.8
+                          ? "text-blue-800"
+                          : model.accuracy > 0.7
+                          ? "text-amber-800"
+                          : "text-rose-800"
+                      }`}
+                    >
+                      {model.modelName}
+                    </CardTitle>
+                    <p
+                      className={`text-sm mt-1 ${
+                        index === 0
+                          ? "text-emerald-600"
+                          : model.accuracy > 0.8
+                          ? "text-blue-600"
+                          : model.accuracy > 0.7
+                          ? "text-amber-600"
+                          : "text-rose-600"
+                      }`}
+                    >
+                      Dibuat pada:{" "}
+                      {new Date(model.createdAt).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
                       })}
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="flex gap-2">
+                    <Badge
+                      variant={index === 0 ? "default" : "secondary"}
+                      className={index === 0 ? "bg-emerald-500 text-white" : ""}
+                    >
+                      {index === 0 ? "Terbaik" : `Peringkat ${index + 1}`}
+                    </Badge>
                     <Badge
                       variant={
-                        model.accuracy >= 0.8
+                        model.accuracy > 0.8
                           ? "default"
-                          : model.accuracy >= 0.6
+                          : model.accuracy > 0.7
                           ? "secondary"
                           : "destructive"
                       }
-                      className="text-sm"
+                      className={
+                        model.accuracy > 0.8
+                          ? "bg-blue-500 text-white"
+                          : model.accuracy > 0.7
+                          ? "bg-amber-500 text-white"
+                          : "bg-rose-500 text-white"
+                      }
                     >
-                      {(model.accuracy * 100).toFixed(2)}%
+                      {model.accuracy > 0.8
+                        ? "Sangat Baik"
+                        : model.accuracy > 0.7
+                        ? "Baik"
+                        : "Perlu Improvement"}
                     </Badge>
                   </div>
                 </div>
-                {index < models.length - 1 && <Separator />}
-              </div>
-            ))}
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-gray-800">
+                        Akurasi
+                      </span>
+                      <span className="text-sm font-bold text-gray-900">
+                        {(model.accuracy * 100).toFixed(2)}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-3">
+                      <div
+                        className={`h-3 rounded-full transition-all duration-300 ${
+                          model.accuracy >= 0.8
+                            ? "bg-gradient-to-r from-green-500 to-emerald-500"
+                            : model.accuracy >= 0.7
+                            ? "bg-gradient-to-r from-blue-500 to-blue-600"
+                            : model.accuracy >= 0.6
+                            ? "bg-gradient-to-r from-yellow-500 to-amber-500"
+                            : "bg-gradient-to-r from-red-500 to-rose-500"
+                        }`}
+                        style={{ width: `${model.accuracy * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <div className="text-gray-800 font-medium">
+                        Model Accuracy
+                      </div>
+                      <div className="font-semibold text-gray-900">
+                        {(model.accuracy * 100).toFixed(2)}%
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-gray-800 font-medium">
+                        Target Column
+                      </div>
+                      <div className="font-semibold text-gray-900">
+                        {model.targetColumn}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-gray-800 font-medium">Classes</div>
+                      <div className="font-semibold text-gray-900">
+                        {model.classes.length}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-gray-800 font-medium">Features</div>
+                      <div className="font-semibold text-gray-900">
+                        {model.featureColumns.length}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-sm text-gray-800 font-medium mb-1">
+                      Features yang digunakan:
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {model.featureColumns
+                        .slice(0, 6)
+                        .map((feature: string) => (
+                          <Badge
+                            key={feature}
+                            variant="outline"
+                            className="text-xs border-gray-400 text-gray-800"
+                          >
+                            {feature}
+                          </Badge>
+                        ))}
+                      {model.featureColumns.length > 6 && (
+                        <Badge
+                          variant="outline"
+                          className="text-xs border-gray-400 text-gray-800"
+                        >
+                          +{model.featureColumns.length - 6} lainnya
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-sm text-gray-800 font-medium mb-1">
+                      Classes:
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {model.classes.map((cls: string) => (
+                        <Badge
+                          key={cls}
+                          variant="outline"
+                          className="text-xs border-gray-400 text-gray-800"
+                        >
+                          {cls}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* Performance Analysis */}
+      <section className="mb-8">
+        <h2 className="text-xl font-bold mb-4 text-gray-800">
+          ANALISIS PERFORMA
+        </h2>
+        <div className="bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-lg p-6">
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold mb-2 text-gray-800">
+                Kualitas Model Berdasarkan Akurasi:
+              </h3>
+              <ul className="space-y-1 text-sm text-gray-800">
+                <li>
+                  • <strong>Sangat Baik (≥80%):</strong>{" "}
+                  {models.filter((m) => m.accuracy >= 0.8).length} model
+                </li>
+                <li>
+                  • <strong>Baik (70-79%):</strong>{" "}
+                  {
+                    models.filter((m) => m.accuracy >= 0.7 && m.accuracy < 0.8)
+                      .length
+                  }{" "}
+                  model
+                </li>
+                <li>
+                  • <strong>Perlu Improvement (&lt;70%):</strong>{" "}
+                  {models.filter((m) => m.accuracy < 0.7).length} model
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="font-semibold mb-2 text-gray-800">Rekomendasi:</h3>
+              <ul className="space-y-1 text-sm text-gray-800">
+                {avgAccuracy >= 80 && (
+                  <li>
+                    • Performa sistem sangat baik, pertahankan kualitas training
+                    data
+                  </li>
+                )}
+                {avgAccuracy >= 70 && avgAccuracy < 80 && (
+                  <li>
+                    • Performa sistem baik, dapat ditingkatkan dengan feature
+                    engineering
+                  </li>
+                )}
+                {avgAccuracy < 70 && (
+                  <li>
+                    • Performa sistem perlu improvement, evaluasi ulang dataset
+                    dan features
+                  </li>
+                )}
+                <li>
+                  • Gunakan model &quot;{topPerformingModel.modelName}&quot;
+                  untuk prediksi optimal
+                </li>
+                <li>• Lakukan retraining berkala untuk menjaga akurasi</li>
+              </ul>
+            </div>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </section>
+
+      {/* Conclusion */}
+      <section>
+        <h2 className="text-xl font-bold mb-4 text-gray-800">KESIMPULAN</h2>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <p className="text-gray-700 leading-relaxed">
+            Sistem klasifikasi Naive Bayes menunjukkan performa yang{" "}
+            {avgAccuracy >= 80
+              ? "sangat baik"
+              : avgAccuracy >= 70
+              ? "baik"
+              : "memerlukan improvement"}
+            dengan rata-rata akurasi {avgAccuracy.toFixed(2)}%. Model &quot;
+            {topPerformingModel.modelName}&quot; menjadi model terbaik dengan
+            akurasi {(topPerformingModel.accuracy * 100).toFixed(2)}%. Untuk
+            optimalisasi lebih lanjut, disarankan untuk melakukan feature
+            selection yang lebih baik dan pengumpulan data training yang lebih
+            beragam.
+          </p>
+        </div>
+      </section>
+    </ReportLayout>
   );
 }

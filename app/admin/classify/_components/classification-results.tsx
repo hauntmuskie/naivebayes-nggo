@@ -9,12 +9,12 @@ import {
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { MetricsCard } from "@/app/admin/models/_components/metrics-card";
 import { ConfusionMatrix } from "@/components/confusion-matrix";
 import { hasActualClasses, formatConfidence } from "@/lib/utils";
 import { BarChart3, Target, CheckCircle, XCircle, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { MetricsCard } from "@/components/metrics-card";
 
 type ClassificationResponse = {
   results: ClassificationsSelect[];
@@ -64,10 +64,7 @@ export function ClassificationResults({
       {/* Metrics Section */}
       {results.metrics && (
         <div className="space-y-6">
-          <MetricsCard
-            metrics={results.metrics}
-            title="Classification Performance"
-          />
+          <MetricsCard metrics={results.metrics} title="Performa Klasifikasi" />
           {results.metrics.confusionMatrix && classes && (
             <ConfusionMatrix metrics={results.metrics} classes={classes} />
           )}
@@ -80,7 +77,7 @@ export function ClassificationResults({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <CardTitle className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
-              Classification Results ({filteredResults.length} of{" "}
+              Hasil Klasifikasi ({filteredResults.length} dari{" "}
               {results.results.length})
             </CardTitle>
             <div className="flex items-center gap-2">
@@ -93,7 +90,8 @@ export function ClassificationResults({
                     onChange={(e) => setFilterClass(e.target.value)}
                     className="px-2 py-1 text-sm border border-border rounded bg-background"
                   >
-                    <option value="">All Classes</option>
+                    {" "}
+                    <option value="">Semua Kelas</option>
                     {classes.map((cls) => (
                       <option key={cls} value={cls}>
                         {cls}
@@ -130,9 +128,9 @@ export function ClassificationResults({
                           </span>
                         )}
                       </button>
-                    </TableHead>
-                    <TableHead>Predicted Class</TableHead>
-                    {showActualClass && <TableHead>Actual Class</TableHead>}
+                    </TableHead>{" "}
+                    <TableHead>Kelas Prediksi</TableHead>
+                    {showActualClass && <TableHead>Kelas Aktual</TableHead>}
                     <TableHead>
                       <button
                         onClick={() => {
@@ -145,7 +143,7 @@ export function ClassificationResults({
                         }}
                         className="flex items-center gap-1 hover:text-foreground"
                       >
-                        Confidence
+                        Kepercayaan
                         {sortBy === "confidence" && (
                           <span className="text-xs">
                             {sortOrder === "asc" ? "↑" : "↓"}
@@ -173,8 +171,8 @@ export function ClassificationResults({
                               <Badge
                                 variant={
                                   result.actualClass === result.predictedClass
-                                    ? "secondary"
-                                    : "destructive"
+                                    ? "success"
+                                    : "error"
                                 }
                                 className="font-medium"
                               >
@@ -214,14 +212,16 @@ export function ClassificationResults({
           {filteredResults.length === 0 && filterClass && (
             <div className="text-center py-8 text-muted-foreground">
               <Target className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p>No results found for class &quot;{filterClass}&quot;</p>
+              <p>
+                Tidak ada hasil ditemukan untuk kelas &quot;{filterClass}&quot;
+              </p>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setFilterClass("")}
                 className="mt-2"
               >
-                Clear filter
+                Hapus filter
               </Button>
             </div>
           )}

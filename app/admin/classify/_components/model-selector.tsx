@@ -24,17 +24,17 @@ export function ModelSelector({
     <div className="space-y-2">
       <Label className="text-sm font-medium flex items-center gap-2">
         <Database className="h-4 w-4" />
-        Select Model
+        Pilih Model
       </Label>
       <Select value={selectedModel} onValueChange={onModelSelect} required>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select a model" />
+          <SelectValue placeholder="Pilih model" />
         </SelectTrigger>
         <SelectContent>
           {models.map((model) => (
             <SelectItem key={model.modelName} value={model.modelName}>
               {model.modelName} • {model.targetColumn} •{" "}
-              {(model.accuracy * 100).toFixed(1)}% accuracy
+              {(model.accuracy * 100).toFixed(1)}% akurasi
             </SelectItem>
           ))}
         </SelectContent>

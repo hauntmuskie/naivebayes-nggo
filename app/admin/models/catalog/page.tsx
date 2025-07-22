@@ -29,7 +29,7 @@ export default async function ModelsCatalogPage() {
           text: `${models.length} model${
             models.length !== 1 ? "" : ""
           } tersedia`,
-          variant: models.length > 0 ? "default" : "secondary",
+          variant: models.length > 0 ? "success" : "secondary",
         }}
       />
 
@@ -45,7 +45,7 @@ export default async function ModelsCatalogPage() {
           description="Katalog model Anda kosong. Latih model Naive Bayes pertama Anda untuk memulai."
           action={{
             label: "Latih Model Baru",
-            href: "/models",
+            href: "/admin/models",
           }}
         />
       )}

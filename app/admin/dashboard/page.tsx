@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ModelCard } from "@/components/model-card";
 import { PageHeader } from "@/components/page-header";
-import { checkHealth, fetchModels } from "../../../_actions";
+import { checkHealth, fetchModels } from "@/_actions";
 import { Metadata } from "next";
 
 export const revalidate = 300;
@@ -37,7 +37,7 @@ export default async function DashboardPage() {
             healthStatus.status === "online"
               ? "Sistem Online"
               : "Sistem Offline",
-          variant: healthStatus.status === "online" ? "default" : "destructive",
+          variant: healthStatus.status === "online" ? "success" : "error",
         }}
       />
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

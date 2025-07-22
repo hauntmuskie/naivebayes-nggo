@@ -5,7 +5,6 @@ import {
 } from "@/_actions";
 import { PageHeader } from "@/components/page-header";
 import { ReportCard } from "@/app/admin/reports/_components/report-card";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -14,7 +13,6 @@ import {
   BarChart3,
   Database,
   TrendingUp,
-  Download,
   Calendar,
   Activity,
   Users,
@@ -143,7 +141,7 @@ export default async function ReportsPage() {
         description="Generate dan kelola laporan komprehensif untuk sistem klasifikasi Naive Bayes analisis kepuasan penumpang"
         badge={{
           text: `${reports.length} jenis laporan tersedia`,
-          variant: "default",
+          variant: "success",
         }}
       />
 
@@ -326,60 +324,6 @@ export default async function ReportsPage() {
           <ReportCard key={report.id} report={report} />
         ))}
       </div>
-
-      {/* Enhanced Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Download className="h-5 w-5" />
-            Aksi Cepat Cetak Laporan
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Unduh laporan dalam format PDF untuk keperluan dokumentasi,
-              presentasi, atau arsip sistem.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Button variant="outline" asChild className="justify-start">
-                <a href="/reports/model-performance?print=true" target="_blank">
-                  <BarChart3 className="h-4 w-4 mr-2" />
-                  Cetak Laporan Performa Model
-                </a>
-              </Button>
-              <Button variant="outline" asChild className="justify-start">
-                <a
-                  href="/reports/classification-results?print=true"
-                  target="_blank"
-                >
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  Cetak Laporan Hasil Klasifikasi
-                </a>
-              </Button>
-              <Button variant="outline" asChild className="justify-start">
-                <a href="/reports/dataset-analysis?print=true" target="_blank">
-                  <Database className="h-4 w-4 mr-2" />
-                  Cetak Laporan Analisis Dataset
-                </a>
-              </Button>
-              <Button variant="outline" asChild className="justify-start">
-                <a href="/reports/system-summary?print=true" target="_blank">
-                  <FileText className="h-4 w-4 mr-2" />
-                  Cetak Ringkasan Sistem
-                </a>
-              </Button>
-            </div>
-            <Separator />
-            <div className="flex justify-between items-center text-xs text-muted-foreground">
-              <span>
-                Tip: Klik tombol di atas untuk membuka laporan dalam tab baru
-              </span>
-              <Badge variant="outline">PDF Ready</Badge>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

@@ -25,6 +25,12 @@ import { unstable_cache } from "next/cache";
 
 const BACKEND_URL = process.env.BACKEND_URL;
 
+if (!BACKEND_URL) {
+  console.warn(
+    "BACKEND_URL environment variable is not set. Some features may not work."
+  );
+}
+
 type HealthStatus = {
   status: "online" | "offline" | "loading";
   version: string;
@@ -37,6 +43,7 @@ type ClassificationResponse = {
 
 export async function checkHealth(): Promise<HealthStatus> {
   if (!BACKEND_URL) {
+    console.warn("Backend URL not configured");
     return { status: "offline", version: "0.0.0" };
   }
 
@@ -48,7 +55,7 @@ export async function checkHealth(): Promise<HealthStatus> {
       },
     });
     if (!response.ok) {
-      throw new Error();
+      throw new Error("API health check failed");
     }
     const healthData = await response.json();
     return { status: "online", version: healthData.version };
@@ -70,6 +77,7 @@ export const fetchModels = unstable_cache(
       });
       return result as ModelsWithMetrics[];
     } catch (error) {
+      console.error("Error fetching models:", error);
       throw error;
     }
   },
@@ -88,17 +96,22 @@ async function saveDatasetRecordsFromCSV(
   try {
     const text = await file.text();
     const lines = text.trim().split("\n");
+
     if (lines.length < 2) return;
+
     const headers = lines[0].split(",").map((h) => h.trim());
     const dataRows = lines.slice(1);
     const recordsToSave = dataRows.slice(0, maxRecords);
+
     const recordsToInsert: DatasetRecordsInsert[] = recordsToSave.map(
       (row, index) => {
         const values = row.split(",").map((v) => v.trim());
         const rowData: Record<string, any> = {};
+
         headers.forEach((header, i) => {
           rowData[header] = values[i] || "";
         });
+
         return {
           recordId:
             rowData.id ||
@@ -112,9 +125,11 @@ async function saveDatasetRecordsFromCSV(
         };
       }
     );
+
     const batchSize = 10;
     for (let i = 0; i < recordsToInsert.length; i += batchSize) {
       const batch = recordsToInsert.slice(i, i + batchSize);
+
       const uniqueBatch = [];
       for (const record of batch) {
         const isDuplicate = await checkRecordDuplicate(record.recordId);
@@ -122,21 +137,19 @@ async function saveDatasetRecordsFromCSV(
           uniqueBatch.push(record);
         }
       }
+
       if (uniqueBatch.length > 0) {
         await database.insert(datasetRecords).values(uniqueBatch);
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error saving dataset records from CSV:", error);
+  }
 }
 
 export async function trainModel(formData: FormData): Promise<ModelsSelect> {
-  if (!BACKEND_URL) {
-    throw new Error();
-  }
-
   try {
     const file = formData.get("file") as File;
-
     if (file) {
       await saveDatasetRecordsFromCSV(file, "training");
     }
@@ -179,6 +192,7 @@ export async function trainModel(formData: FormData): Promise<ModelsSelect> {
         classMetrics: modelInfo.metrics.classMetrics,
         confusionMatrix: modelInfo.metrics.confusionMatrix,
       };
+
       await database.insert(modelMetrics).values(metricsInsert);
     }
 
@@ -203,6 +217,7 @@ export async function deleteModel(modelName: string): Promise<boolean> {
       throw new Error(`Model "${modelName}" not found in database`);
     }
 
+    let apiDeleted = false;
     if (BACKEND_URL) {
       try {
         const response = await fetch(`${BACKEND_URL}/api/models/${modelName}`, {
@@ -210,7 +225,17 @@ export async function deleteModel(modelName: string): Promise<boolean> {
           cache: "no-store",
           signal: AbortSignal.timeout(5000),
         });
-      } catch (apiError) {}
+
+        if (response.ok) {
+          apiDeleted = true;
+        } else {
+          console.warn(
+            `Failed to delete model from API: ${response.status} ${response.statusText}`
+          );
+        }
+      } catch (apiError) {
+        console.warn("Backend API not available for model deletion:", apiError);
+      }
     }
 
     await Promise.all([
@@ -228,6 +253,7 @@ export async function deleteModel(modelName: string): Promise<boolean> {
 
     return true;
   } catch (error) {
+    console.error("Error deleting model:", error);
     return false;
   }
 }
@@ -236,12 +262,13 @@ export async function classifyData(
   formData: FormData
 ): Promise<ClassificationResponse> {
   if (!BACKEND_URL) {
-    throw new Error();
+    throw new Error(
+      "Backend URL is not configured. Please set BACKEND_URL environment variable."
+    );
   }
 
   try {
     const file = formData.get("file") as File;
-
     if (file) {
       await saveDatasetRecordsFromCSV(file, "testing");
     }
@@ -253,6 +280,7 @@ export async function classifyData(
     });
     if (!response.ok) {
       const errorData = await response.json();
+
       if (typeof errorData.detail === "object" && errorData.detail.message) {
         throw new Error(JSON.stringify(errorData.detail));
       } else if (
@@ -283,7 +311,9 @@ export async function classifyData(
           actualClass: result.actualClass || null,
           confidence: result.confidence,
         }));
+
       await database.insert(classifications).values(classificationsToInsert);
+
       if (results.metrics) {
         const metricsInsert: ModelMetricsInsert = {
           modelId: model.id,
@@ -294,6 +324,7 @@ export async function classifyData(
           classMetrics: results.metrics.classMetrics,
           confusionMatrix: results.metrics.confusionMatrix,
         };
+
         await database.insert(modelMetrics).values(metricsInsert);
       }
     }
@@ -304,6 +335,7 @@ export async function classifyData(
 
     return results;
   } catch (error: any) {
+    console.error("Classification error:", error);
     if (error instanceof Error) {
       throw error;
     } else {
@@ -327,14 +359,18 @@ export async function saveClassificationHistory(
       accuracy: accuracy || null,
       results: JSON.stringify(results),
     };
+
     const [inserted] = await database
       .insert(classificationHistory)
       .values(historyInsert)
       .returning();
+
     revalidateTag("classification-history");
     revalidatePath("/classify/history");
+
     return inserted.id;
   } catch (error) {
+    console.error("Error saving classification history:", error);
     throw error;
   }
 }
@@ -346,6 +382,7 @@ export const fetchClassificationHistory = unstable_cache(
         orderBy: [desc(classificationHistory.createdAt)],
       });
     } catch (error) {
+      console.error("Error fetching classification history:", error);
       throw error;
     }
   },
@@ -361,9 +398,11 @@ export async function deleteClassificationHistory(id: string): Promise<void> {
     await database
       .delete(classificationHistory)
       .where(eq(classificationHistory.id, id));
+
     revalidateTag("classification-history");
     revalidatePath("/classify/history");
   } catch (error) {
+    console.error("Error deleting classification history:", error);
     throw error;
   }
 }
@@ -376,6 +415,7 @@ export const fetchClassificationById = unstable_cache(
       });
       return result || null;
     } catch (error) {
+      console.error("Error fetching classification by ID:", error);
       throw error;
     }
   },
@@ -393,6 +433,7 @@ export const fetchDatasetRecords = unstable_cache(
         orderBy: [desc(datasetRecords.createdAt)],
       });
     } catch (error) {
+      console.error("Error fetching dataset records:", error);
       throw error;
     }
   },
@@ -408,8 +449,10 @@ export async function checkRecordDuplicate(recordId: string): Promise<boolean> {
     const existingRecord = await database.query.datasetRecords.findFirst({
       where: eq(datasetRecords.recordId, recordId),
     });
+
     return !!existingRecord;
   } catch (error) {
+    console.error("Error checking record duplicate:", error);
     throw error;
   }
 }
@@ -421,6 +464,7 @@ export const fetchClassifications = unstable_cache(
         orderBy: [desc(classifications.createdAt)],
       });
     } catch (error) {
+      console.error("Error fetching classifications:", error);
       throw error;
     }
   },
@@ -430,3 +474,25 @@ export const fetchClassifications = unstable_cache(
     revalidate: 60,
   }
 );
+
+export async function deleteDatasetRecord(id: string): Promise<void> {
+  try {
+    await database.delete(datasetRecords).where(eq(datasetRecords.id, id));
+    revalidateTag("dataset-records");
+    revalidatePath("/admin/passengers");
+  } catch (error) {
+    console.error("Error deleting dataset record:", error);
+    throw new Error("Failed to delete dataset record");
+  }
+}
+
+export async function deleteAllDatasetRecords(): Promise<void> {
+  try {
+    await database.delete(datasetRecords);
+    revalidateTag("dataset-records");
+    revalidatePath("/admin/passengers");
+  } catch (error) {
+    console.error("Error deleting all dataset records:", error);
+    throw new Error("Failed to delete all dataset records");
+  }
+}

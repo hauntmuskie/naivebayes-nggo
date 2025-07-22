@@ -17,17 +17,17 @@ export function HistoryGrid({ history }: HistoryGridProps) {
 
   const deleteItem = async (id: string) => {
     if (deletingIds.has(id)) return;
-    
-    setDeletingIds(prev => new Set(prev).add(id));
+
+    setDeletingIds((prev) => new Set(prev).add(id));
     try {
       await deleteClassificationHistory(id);
-      toast.success("Classification deleted");
+      toast.success("Klasifikasi berhasil dihapus");
       router.refresh();
     } catch (error) {
       console.error("Error deleting classification history:", error);
-      toast.error("Failed to delete classification");
+      toast.error("Gagal menghapus klasifikasi");
     } finally {
-      setDeletingIds(prev => {
+      setDeletingIds((prev) => {
         const next = new Set(prev);
         next.delete(id);
         return next;
@@ -38,9 +38,9 @@ export function HistoryGrid({ history }: HistoryGridProps) {
   return (
     <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {history.map((item) => (
-        <HistoryCard 
-          key={item.id} 
-          item={item} 
+        <HistoryCard
+          key={item.id}
+          item={item}
           onDelete={deleteItem}
           isDeleting={deletingIds.has(item.id)}
         />

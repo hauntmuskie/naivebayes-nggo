@@ -1,0 +1,32 @@
+@startuml Classify Data Activity Diagram
+title Activity Diagram - Klasifikasi Kepuasan Penumpang
+
+|#LightBlue|Admin|
+start
+:Pilih menu Klasifikasi;
+
+|#LightGreen|System|
+:Tampilkan daftar model;
+
+|Admin|
+:Pilih model;
+
+|System|
+:Load model;
+:Tampilkan form input;
+
+|Admin|
+:Input data penumpang;
+:Klik "Klasifikasi";
+
+|System|
+:Proses data;
+:Lakukan prediksi;
+:Tampilkan hasil;
+:Simpan ke history;
+
+|Admin|
+:Lihat hasil;
+
+stop
+@enduml

@@ -10,7 +10,7 @@ export default function ModelNotFound() {
       </p>
       <div className="flex gap-4 mt-6">
         <Button variant="outline" asChild>
-          <Link href="/models">Lihat Semua Model</Link>
+          <Link href="/admin/models">Lihat Semua Model</Link>
         </Button>
         <Button asChild>
           <Link href="/train">Latih Model Baru</Link>

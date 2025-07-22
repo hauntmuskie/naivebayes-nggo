@@ -1,0 +1,64 @@
+@startuml Login Sequence Diagram
+title Login Admin - Sequence Diagram
+
+actor Admin
+boundary LoginForm
+control AuthAPI
+database DB
+boundary Dashboard
+
+== Login Process ==
+Admin -> LoginForm: Buka halaman login
+activate LoginForm
+
+LoginForm --> Admin: Tampilkan form login
+Admin -> LoginForm: Input username & password
+Admin -> LoginForm: Klik "Login"
+
+LoginForm -> AuthAPI: authenticate(username, password)
+activate AuthAPI
+
+AuthAPI -> AuthAPI: Validate input format
+AuthAPI -> DB: checkCredentials(username, hashedPassword)
+activate DB
+
+alt Kredensial Valid
+    DB --> AuthAPI: User data found
+    deactivate DB
+    
+    AuthAPI -> AuthAPI: Generate session token
+    AuthAPI -> DB: saveSession(userId, token)
+    activate DB
+    DB --> AuthAPI: Session saved
+    deactivate DB
+    
+    AuthAPI --> LoginForm: Success + token
+    deactivate AuthAPI
+    
+    LoginForm -> Dashboard: Redirect to dashboard
+    activate Dashboard
+    Dashboard --> Admin: Tampilkan dashboard utama
+    deactivate Dashboard
+    
+else Kredensial Invalid
+    DB --> AuthAPI: No user found / wrong password
+    deactivate DB
+    
+    AuthAPI --> LoginForm: Error: Invalid credentials
+    deactivate AuthAPI
+    
+    LoginForm --> Admin: Tampilkan pesan error
+    LoginForm --> Admin: Reset form
+end
+
+deactivate LoginForm
+
+note right of AuthAPI
+  Security features:
+  - Password hashing
+  - Session management
+  - Input validation
+  - Rate limiting
+end note
+
+@enduml

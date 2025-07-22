@@ -1,0 +1,61 @@
+@startuml Reports Generation
+title Generate Reports
+
+actor Admin
+boundary ReportsPage
+control API
+database DB
+
+== Akses Halaman Reports ==
+Admin -> ReportsPage: Buka halaman reports
+activate ReportsPage
+
+ReportsPage -> API: fetchReportsData()
+activate API
+
+API -> DB: Ambil data models, classifications, datasets
+activate DB
+DB --> API: Data terkumpul
+deactivate DB
+
+API --> ReportsPage: Data untuk 4 jenis laporan
+deactivate API
+
+ReportsPage --> Admin: Tampilkan pilihan laporan
+deactivate ReportsPage
+
+== Generate Laporan ==
+Admin -> ReportsPage: Pilih jenis laporan
+activate ReportsPage
+
+ReportsPage -> API: generateReport(type)
+activate API
+
+API -> DB: Query data spesifik sesuai jenis
+activate DB
+DB --> API: Data terfilter
+deactivate DB
+
+API --> ReportsPage: Laporan terformat
+deactivate API
+
+ReportsPage --> Admin: Tampilkan hasil laporan
+deactivate ReportsPage
+
+== Unduh Laporan ==
+Admin -> ReportsPage: Klik tombol unduh
+activate ReportsPage
+
+ReportsPage -> API: downloadReport(format)
+activate API
+
+API -> API: Generate file PDF
+API --> ReportsPage: File laporan
+deactivate API
+
+ReportsPage --> Admin: Download file
+deactivate ReportsPage
+
+@enduml
+
+@enduml

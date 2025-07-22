@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -13,6 +13,7 @@ import {
   Users,
   FileText,
 } from "lucide-react";
+
 const navItems = [
   {
     href: "/admin/dashboard",
@@ -71,26 +72,25 @@ const navItems = [
     hoverColor: "group-hover:text-emerald-400",
   },
 ];
+
 export function NavBar() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     setMounted(true);
   }, []);
   const isClient = typeof window !== "undefined";
-  const currentPath = useMemo(() => {
-    return isClient && mounted ? pathname || "/" : "/";
-  }, [isClient, mounted, pathname]);
+  const currentPath = isClient && mounted ? pathname || "/" : "/";
   return (
     <>
-      {/* Desktop Sidebar */}
+      {" "}
       <nav
-        className={`hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col bg-sidebar border-r border-sidebar-border z-50 transition-opacity duration-200 ${
+        className={`no-print hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col bg-sidebar border-r border-sidebar-border z-50 transition-opacity duration-200 ${
           mounted ? "opacity-100" : "opacity-0"
         }`}
         style={{ visibility: mounted ? "visible" : "hidden" }}
       >
-        {/* Header */}
         <div className="p-6 border-b border-sidebar-border">
           <Link href="/admin/dashboard" className="flex items-center gap-3">
             <div className="h-10 w-30 relative overflow-hidden rounded-lg shadow-sm">
@@ -106,9 +106,8 @@ export function NavBar() {
                 Naive Bayes Classifier
               </span>
             </div>
-          </Link>
+          </Link>{" "}
         </div>
-        {/* Navigation */}
         <div className="flex-1 p-4 space-y-2">
           <div className="mb-4">
             <div className="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 mb-3">
@@ -121,11 +120,13 @@ export function NavBar() {
                   currentPath !== "/admin" &&
                   item.href !== "/admin"
                 : currentPath === item.href;
+              const isRootPage = currentPath === item.href;
               const showSubItems =
                 hasSubItems &&
                 currentPath.startsWith(item.href) &&
                 currentPath !== "/admin" &&
                 item.href !== "/admin";
+
               return (
                 <div key={item.href}>
                   <Link
@@ -159,7 +160,6 @@ export function NavBar() {
                       <div className="h-2 w-2 bg-primary rounded-full" />
                     )}
                   </Link>
-                  {/* Sub navigation */}
                   {showSubItems && (
                     <div className="ml-6 mt-2 space-y-1 border-l border-sidebar-border pl-4">
                       {item.subItems!.map((subItem) => {
@@ -185,6 +185,9 @@ export function NavBar() {
                                 {subItem.description}
                               </div>
                             </div>
+                            {isSubActive && (
+                              <div className="h-1.5 w-1.5 bg-primary rounded-full" />
+                            )}
                           </Link>
                         );
                       })}
@@ -192,23 +195,22 @@ export function NavBar() {
                   )}
                 </div>
               );
-            })}{" "}
-          </div>{" "}
+            })}
+          </div>
         </div>
-        {/* Footer */}
         <div className="p-4 border-t border-sidebar-border">
           <div className="text-xs text-muted-foreground mt-2 opacity-70">
             {new Date().getFullYear()} • Gapura Angkasa
           </div>
-        </div>
+        </div>{" "}
       </nav>
-      {/* Mobile Bottom Navigation */}
       <nav
         className={`lg:hidden fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border z-40 transition-opacity duration-200 ${
           mounted ? "opacity-100" : "opacity-0"
         }`}
         style={{ visibility: mounted ? "visible" : "hidden" }}
       >
+        {" "}
         <div className="flex items-center justify-around py-2">
           {navItems.map((item) => {
             const hasSubItems = item.subItems && item.subItems.length > 0;
@@ -218,6 +220,7 @@ export function NavBar() {
                 item.href !== "/admin"
               : currentPath === item.href;
             const isRootPage = currentPath === item.href;
+
             return (
               <div key={item.href} className="flex flex-col items-center">
                 <Link
@@ -242,7 +245,6 @@ export function NavBar() {
                     <div className="h-1 w-6 bg-primary rounded-full" />
                   )}
                 </Link>
-                {/* Mobile sub-navigation - appears when on root page */}
                 {hasSubItems && isRootPage && (
                   <div className="absolute bottom-16 bg-sidebar border border-sidebar-border rounded-lg shadow-lg p-2 min-w-32 left-1/2 transform -translate-x-1/2">
                     {item.subItems!.map((subItem) => {
@@ -257,7 +259,8 @@ export function NavBar() {
                               : "text-muted-foreground hover:bg-sidebar-accent/50"
                           }`}
                         >
-                          {subItem.icon} {subItem.label}
+                          {subItem.icon}
+                          {subItem.label}
                         </Link>
                       );
                     })}
