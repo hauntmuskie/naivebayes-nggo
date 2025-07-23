@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   FileText,
   Target,
-  TrendingUp,
   Clock,
   Database,
   BarChart3,
@@ -93,17 +92,6 @@ export default async function ClassificationDetailsPage({
     }
   })();
 
-  const correctPredictions = results.filter(
-    (r: any) => r.actualClass === r.predictedClass
-  ).length;
-  const accuracyFromResults =
-    results.length > 0 ? correctPredictions / results.length : 0;
-  const confidenceAvg =
-    results.length > 0
-      ? results.reduce((sum: number, r: any) => sum + r.confidence, 0) /
-        results.length
-      : 0;
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -126,8 +114,7 @@ export default async function ClassificationDetailsPage({
         </div>
       </div>
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {" "}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="border-border/40">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -147,19 +134,6 @@ export default async function ClassificationDetailsPage({
             </div>
             <div className="text-2xl font-bold mt-1">
               {classification.totalRecords.toLocaleString()}
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-border/40">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-500" />
-              <span className="text-sm font-medium">Akurasi</span>
-            </div>
-            <div className="text-2xl font-bold text-green-600 mt-1">
-              {classification.accuracy
-                ? `${(classification.accuracy * 100).toFixed(1)}%`
-                : `${(accuracyFromResults * 100).toFixed(1)}%`}
             </div>
           </CardContent>
         </Card>
@@ -245,32 +219,9 @@ export default async function ClassificationDetailsPage({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-900/20 rounded-lg">
-              <div className="text-2xl font-bold">{results.length}</div>
-              <div className="text-sm text-muted-foreground">
-                Total Prediksi
-              </div>
-            </div>
-            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
-                {correctPredictions}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Prediksi Benar
-              </div>
-            </div>
-            <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">
-                {(confidenceAvg * 100).toFixed(1)}%
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Rata-rata Keyakinan
-              </div>
-            </div>
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
 
-          {/* Sample Results */}
+          {/* Results */}
           <div className="mt-6">
             <h4 className="font-semibold mb-3">Prediksi</h4>
             <div className="space-y-2 max-h-96 overflow-y-auto">

@@ -24,7 +24,7 @@ export default async function ModelsCatalogPage() {
     <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Katalog Model"
-        description="Jelajahi dan kelola model Naive Bayes terlatih Anda"
+        description="Kelola model Naive Bayes terlatih"
         badge={{
           text: `${models.length} model${
             models.length !== 1 ? "" : ""
@@ -34,7 +34,7 @@ export default async function ModelsCatalogPage() {
       />
 
       {hasModels ? (
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
           {models.map((model) => (
             <ModelCard key={model.modelName} model={model} />
           ))}
