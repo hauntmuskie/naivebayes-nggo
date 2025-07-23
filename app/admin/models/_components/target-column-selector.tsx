@@ -25,8 +25,7 @@ export function TargetColumnSelector({
   required = true,
 }: TargetColumnSelectorProps) {
   return (
-    <div>
-      {" "}
+    <>
       <Label
         htmlFor="target-column"
         className="text-sm font-medium flex items-center gap-2"
@@ -36,7 +35,6 @@ export function TargetColumnSelector({
       </Label>
       {columns.length > 0 ? (
         <Select value={value} onValueChange={onChange}>
-          {" "}
           <SelectTrigger
             id="target-column"
             className="w-full mt-1.5 rounded-none bg-input focus-visible:ring-0 border-border text-sm"
@@ -61,10 +59,10 @@ export function TargetColumnSelector({
           disabled={!hasFile}
           className="mt-1.5 rounded-none bg-input focus-visible:ring-0 border-border text-sm"
         />
-      )}{" "}
+      )}
       <p className="mt-1 text-xs text-muted-foreground">
         Kolom yang berisi label kelas
       </p>
-    </div>
+    </>
   );
 }

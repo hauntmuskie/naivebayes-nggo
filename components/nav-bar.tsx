@@ -84,7 +84,6 @@ export function NavBar() {
   const currentPath = isClient && mounted ? pathname || "/" : "/";
   return (
     <>
-      {" "}
       <nav
         className={`no-print hidden lg:flex fixed left-0 top-0 h-screen w-64 flex-col bg-sidebar border-r border-sidebar-border z-50 transition-opacity duration-200 ${
           mounted ? "opacity-100" : "opacity-0"
@@ -106,7 +105,7 @@ export function NavBar() {
                 Naive Bayes Classifier
               </span>
             </div>
-          </Link>{" "}
+          </Link>
         </div>
         <div className="flex-1 p-4 space-y-2">
           <div className="mb-4">
@@ -202,7 +201,7 @@ export function NavBar() {
           <div className="text-xs text-muted-foreground mt-2 opacity-70">
             {new Date().getFullYear()} • Gapura Angkasa
           </div>
-        </div>{" "}
+        </div>
       </nav>
       <nav
         className={`lg:hidden fixed bottom-0 left-0 right-0 bg-sidebar border-t border-sidebar-border z-40 transition-opacity duration-200 ${
@@ -210,7 +209,6 @@ export function NavBar() {
         }`}
         style={{ visibility: mounted ? "visible" : "hidden" }}
       >
-        {" "}
         <div className="flex items-center justify-around py-2">
           {navItems.map((item) => {
             const hasSubItems = item.subItems && item.subItems.length > 0;

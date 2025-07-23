@@ -7,22 +7,20 @@ import {
 } from "@/database/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { formatPercentage, cn } from "@/lib/utils";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
+import { formatPercentage } from "@/lib/utils";
 import { ConfusionMatrix } from "@/components/confusion-matrix";
 import { deleteModel } from "@/_actions";
 import Link from "next/link";
-import {
-  Target,
-  Search,
-  RotateCcw,
-  Scale,
-  Brain,
-  Database,
-  Eye,
-  Trash2,
-  BarChart3,
-} from "lucide-react";
-import { useConfirmationDialog } from "@/components/confirmation-dialog";
+import { Target, Brain, Eye, Trash2, BarChart3 } from "lucide-react";
+import { useConfirmationDialog } from "@/hooks/use-dialog";
 
 export function MetricsCard({
   metrics,
@@ -36,48 +34,7 @@ export function MetricsCard({
   showActions?: boolean;
 }) {
   const { openDialog, ConfirmationDialog } = useConfirmationDialog();
-  const metricsData = [
-    {
-      label: "Akurasi",
-      value: metrics.accuracy,
-      description: "Ketepatan model secara keseluruhan",
-      color: "from-blue-500/20 to-blue-600/30",
-      borderColor: "border-blue-500/30",
-      textColor: "text-blue-400",
-      icon: Target,
-      bgGlow: "bg-blue-500/5",
-    },
-    {
-      label: "Presisi",
-      value: metrics.precision,
-      description: "Akurasi prediksi positif",
-      color: "from-emerald-500/20 to-emerald-600/30",
-      borderColor: "border-emerald-500/30",
-      textColor: "text-emerald-400",
-      icon: Search,
-      bgGlow: "bg-emerald-500/5",
-    },
-    {
-      label: "Recall",
-      value: metrics.recall,
-      description: "Tingkat deteksi positif benar",
-      color: "from-purple-500/20 to-purple-600/30",
-      borderColor: "border-purple-500/30",
-      textColor: "text-purple-400",
-      icon: RotateCcw,
-      bgGlow: "bg-purple-500/5",
-    },
-    {
-      label: "Skor F1",
-      value: metrics.f1Score,
-      description: "Keseimbangan presisi & recall",
-      color: "from-amber-500/20 to-amber-600/30",
-      borderColor: "border-amber-500/30",
-      textColor: "text-amber-400",
-      icon: Scale,
-      bgGlow: "bg-amber-500/5",
-    },
-  ];
+
   const getScoreLevel = (value: number) => {
     if (value >= 0.9)
       return { level: "Sangat Baik", color: "text-emerald-400" };
@@ -114,7 +71,7 @@ export function MetricsCard({
             <div>
               <CardTitle className="text-xl font-bold text-foreground tracking-tight">
                 {title}
-              </CardTitle>{" "}
+              </CardTitle>
               <p className="text-sm text-muted-foreground/80 mt-1 tracking-wide">
                 {model
                   ? `${model.modelName} • Analisis Performa`
@@ -128,7 +85,6 @@ export function MetricsCard({
                 href={`/admin/models/${encodeURIComponent(model.modelName)}`}
                 className="inline-flex items-center justify-center h-10 px-4 text-sm font-medium rounded-xl border border-border/40 bg-background/80 hover:bg-accent/80 hover:text-accent-foreground transition-all duration-300 hover:scale-105 hover:shadow-lg"
               >
-                {" "}
                 <Eye className="h-4 w-4 mr-2" />
                 Detail
               </Link>
@@ -146,14 +102,14 @@ export function MetricsCard({
         </div>
       </CardHeader>
 
+      {/* Model Information Section */}
       <CardContent className="p-8 space-y-8">
-        {/* Model Information Section */}
         {model && (
           <div className="space-y-6 pb-8 border-b border-border/20">
             <div className="flex items-center space-x-3 mb-4">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center border border-border/30">
                 <Brain className="h-4 w-4 text-blue-400" />
-              </div>{" "}
+              </div>
               <h3 className="text-base font-bold text-foreground uppercase tracking-wider">
                 Konfigurasi Model
               </h3>
@@ -161,7 +117,6 @@ export function MetricsCard({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="space-y-3 p-4 bg-gradient-to-br from-accent/30 to-muted/20 rounded-xl border border-border/30">
-                {" "}
                 <p className="text-xs uppercase tracking-widest text-muted-foreground/80 font-bold">
                   Kolom Target
                 </p>
@@ -174,7 +129,6 @@ export function MetricsCard({
               </div>
 
               <div className="space-y-3 p-4 bg-gradient-to-br from-accent/30 to-muted/20 rounded-xl border border-border/30">
-                {" "}
                 <p className="text-xs uppercase tracking-widest text-muted-foreground/80 font-bold">
                   Kelas ({model.classes.length})
                 </p>
@@ -197,7 +151,6 @@ export function MetricsCard({
             </div>
 
             <div className="space-y-3 p-4 bg-gradient-to-br from-accent/30 to-muted/20 rounded-xl border border-border/30">
-              {" "}
               <p className="text-xs uppercase tracking-widest text-muted-foreground/80 font-bold">
                 Kolom Fitur ({model.featureColumns.length})
               </p>
@@ -218,17 +171,17 @@ export function MetricsCard({
               </div>
             </div>
           </div>
-        )}{" "}
+        )}
+
         {/* Class-Specific Metrics Section */}
         {metrics.classMetrics &&
           Object.keys(metrics.classMetrics).length > 0 && (
             <div className="space-y-6 pb-8 border-b border-border/20">
-              {" "}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 rounded-lg flex items-center justify-center border border-border/30">
                     <BarChart3 className="h-4 w-4 text-cyan-400" />
-                  </div>{" "}
+                  </div>
                   <h3 className="text-base font-bold text-foreground uppercase tracking-wider">
                     Performa Per Kelas
                   </h3>
@@ -238,7 +191,7 @@ export function MetricsCard({
                   <div className="text-right">
                     <div className="text-lg font-bold text-blue-400">
                       {formatPercentage(metrics.accuracy)}%
-                    </div>{" "}
+                    </div>
                     <div className="text-xs text-muted-foreground uppercase tracking-wider">
                       Akurasi Keseluruhan
                     </div>
@@ -246,27 +199,27 @@ export function MetricsCard({
                 </div>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="border-b border-border/40">
-                      <th className="text-left py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-b border-border/40">
+                      <TableHead className="text-left py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
                         Kelas
-                      </th>
-                      <th className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                      </TableHead>
+                      <TableHead className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
                         Presisi
-                      </th>
-                      <th className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                      </TableHead>
+                      <TableHead className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
                         Recall
-                      </th>
-                      <th className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                      </TableHead>
+                      <TableHead className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
                         Skor F1
-                      </th>
-                      <th className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
+                      </TableHead>
+                      <TableHead className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
                         Dukungan
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
                     {Object.entries(metrics.classMetrics)
                       .filter(
                         ([key]) =>
@@ -281,16 +234,16 @@ export function MetricsCard({
                         const support = classData.support || 0;
 
                         return (
-                          <tr
+                          <TableRow
                             key={className}
                             className="border-b border-border/20 hover:bg-accent/20 transition-colors"
                           >
-                            <td className="py-4 px-4">
+                            <TableCell className="py-4 px-4">
                               <span className="inline-flex items-center px-3 py-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium text-sm">
                                 {className}
                               </span>
-                            </td>
-                            <td className="py-4 px-4 text-right">
+                            </TableCell>
+                            <TableCell className="py-4 px-4 text-right">
                               <div className="flex flex-col items-end space-y-1">
                                 <span className="text-sm font-mono font-bold text-emerald-400">
                                   {formatPercentage(precision)}%
@@ -299,8 +252,8 @@ export function MetricsCard({
                                   {precision.toFixed(3)}
                                 </span>
                               </div>
-                            </td>
-                            <td className="py-4 px-4 text-right">
+                            </TableCell>
+                            <TableCell className="py-4 px-4 text-right">
                               <div className="flex flex-col items-end space-y-1">
                                 <span className="text-sm font-mono font-bold text-purple-400">
                                   {formatPercentage(recall)}%
@@ -309,8 +262,8 @@ export function MetricsCard({
                                   {recall.toFixed(3)}
                                 </span>
                               </div>
-                            </td>
-                            <td className="py-4 px-4 text-right">
+                            </TableCell>
+                            <TableCell className="py-4 px-4 text-right">
                               <div className="flex flex-col items-end space-y-1">
                                 <span className="text-sm font-mono font-bold text-amber-400">
                                   {formatPercentage(f1Score)}%
@@ -319,67 +272,22 @@ export function MetricsCard({
                                   {f1Score.toFixed(3)}
                                 </span>
                               </div>
-                            </td>
-                            <td className="py-4 px-4 text-right">
+                            </TableCell>
+                            <TableCell className="py-4 px-4 text-right">
                               <span className="text-sm font-mono font-bold text-cyan-400">
                                 {support}
                               </span>
-                            </td>
-                          </tr>
+                            </TableCell>
+                          </TableRow>
                         );
                       })}
-                  </tbody>
-                </table>
+                  </TableBody>
+                </Table>
               </div>
             </div>
           )}
-        {/* Enhanced Summary section */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-accent/20 via-muted/30 to-secondary/20 rounded-xl border border-border/20 relative overflow-hidden">
-          {/* Subtle animated background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-emerald-500/5 animate-pulse" />
-
-          <div className="relative z-10">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-lg flex items-center justify-center border border-border/30">
-                <Database className="h-4 w-4 text-amber-400" />
-              </div>{" "}
-              <h4 className="font-bold text-foreground text-base tracking-wide">
-                Ringkasan Performa
-              </h4>
-            </div>{" "}
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Model ini menunjukkan performa{" "}
-              <span
-                className={cn(
-                  "font-bold px-2 py-1 rounded-md",
-                  getScoreLevel(metrics.accuracy).color,
-                  getScoreLevel(metrics.accuracy).color.replace(
-                    "text-",
-                    "bg-"
-                  ) + "/20"
-                )}
-              >
-                {getScoreLevel(metrics.accuracy).level.toLowerCase()}
-              </span>{" "}
-              secara keseluruhan dengan akurasi{" "}
-              {formatPercentage(metrics.accuracy)}%. Skor F1 sebesar{" "}
-              {formatPercentage(metrics.f1Score)}% menunjukkan keseimbangan
-              presisi-recall yang{" "}
-              <span
-                className={cn(
-                  "font-bold px-2 py-1 rounded-md",
-                  getScoreLevel(metrics.f1Score).color,
-                  getScoreLevel(metrics.f1Score).color.replace("text-", "bg-") +
-                    "/20"
-                )}
-              >
-                {getScoreLevel(metrics.f1Score).level.toLowerCase()}
-              </span>
-              .
-            </p>
-          </div>
-        </div>
       </CardContent>
+
       {/* Confusion Matrix Section */}
       {metrics.confusionMatrix && model?.classes && (
         <div className="px-8 pb-8">

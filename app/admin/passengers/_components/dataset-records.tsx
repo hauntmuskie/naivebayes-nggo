@@ -28,7 +28,7 @@ import { Filter, Search, FileText, Upload, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { deleteDatasetRecord, deleteAllDatasetRecords } from "@/_actions";
-import { useConfirmationDialog } from "@/components/confirmation-dialog";
+import { useConfirmationDialog } from "@/hooks/use-dialog";
 
 interface FilterState {
   datasetType: string;

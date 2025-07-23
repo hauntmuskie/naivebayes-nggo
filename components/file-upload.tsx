@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 
 import { useState } from "react";
 import { Download, CheckCircle, FileText, Trash2 } from "lucide-react";
-import { useConfirmationDialog } from "@/components/confirmation-dialog";
+import { useConfirmationDialog } from "@/hooks/use-dialog";
 
 interface FileUploadProps {
   accept: string;

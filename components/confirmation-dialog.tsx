@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, Loader2 } from "lucide-react";
 
-interface ConfirmationDialogProps {
+export interface ConfirmationDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => Promise<void> | void;
@@ -46,7 +46,6 @@ export function ConfirmationDialog({
       onClose();
     } catch (error) {
       console.error("Error in confirmation dialog:", error);
-      // Don't close the dialog if there's an error
     } finally {
       setIsSubmitting(false);
     }
@@ -98,38 +97,4 @@ export function ConfirmationDialog({
       </DialogContent>
     </Dialog>
   );
-}
-
-// Hook for easier usage
-export function useConfirmationDialog() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [config, setConfig] = useState<
-    Omit<ConfirmationDialogProps, "isOpen" | "onClose">
-  >({
-    onConfirm: () => {},
-    title: "",
-    description: "",
-  });
-
-  const openDialog = (
-    dialogConfig: Omit<ConfirmationDialogProps, "isOpen" | "onClose">
-  ) => {
-    setConfig(dialogConfig);
-    setIsOpen(true);
-  };
-
-  const closeDialog = () => {
-    setIsOpen(false);
-  };
-
-  const ConfirmationDialogComponent = () => (
-    <ConfirmationDialog {...config} isOpen={isOpen} onClose={closeDialog} />
-  );
-
-  return {
-    openDialog,
-    closeDialog,
-    ConfirmationDialog: ConfirmationDialogComponent,
-    isOpen,
-  };
 }

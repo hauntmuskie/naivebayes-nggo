@@ -1,7 +1,6 @@
 import { fetchModels } from "@/_actions";
 import { MetricsCard } from "@/app/admin/models/_components/metrics-card";
 import { Button } from "@/components/ui/button";
-import { ConfusionMatrix } from "@/components/confusion-matrix";
 import { notFound } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -63,7 +62,7 @@ export default async function ModelDetailPage({
           </h1>{" "}
           <Button className="ml-auto" asChild>
             <Link
-              href={`/classify?model=${encodeURIComponent(model.modelName)}`}
+              href={`/admin/classify?model=${encodeURIComponent(model.modelName)}`}
             >
               Klasifikasi Data
             </Link>

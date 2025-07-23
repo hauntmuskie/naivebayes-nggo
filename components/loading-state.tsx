@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { LoaderCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +22,7 @@ export function LoadingState({
     return (
       <div className={cn("flex items-center justify-center py-8", className)}>
         <div className="flex items-center gap-2 text-muted-foreground">
-          <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+          <LoaderCircle className="h-4 w-4 animate-spin text-muted-foreground" />
           <span className="text-sm">{title}</span>
         </div>
       </div>
@@ -36,7 +37,7 @@ export function LoadingState({
         <div className="text-center space-y-4">
           <div className="flex justify-center">
             {icon || (
-              <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full" />
+              <LoaderCircle className="h-8 w-8 animate-spin text-primary" />
             )}
           </div>
           <div className="space-y-2">
@@ -56,7 +57,7 @@ export function LoadingState({
         <div className="space-y-4">
           <div className="flex justify-center">
             {icon || (
-              <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
+              <LoaderCircle className="h-6 w-6 animate-spin text-primary" />
             )}
           </div>
           <div className="space-y-2">

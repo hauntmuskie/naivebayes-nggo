@@ -13,7 +13,7 @@ export default function ModelNotFound() {
           <Link href="/admin/models">Lihat Semua Model</Link>
         </Button>
         <Button asChild>
-          <Link href="/train">Latih Model Baru</Link>
+          <Link href="/admin/train">Latih Model Baru</Link>
         </Button>
       </div>
     </div>

@@ -165,7 +165,6 @@ export function TrainForm() {
   return (
     <Card className="border-0 shadow-sm overflow-hidden">
       <CardHeader className="pb-3 border-b border-border">
-        {" "}
         <CardTitle className="font-medium text-base sm:text-lg">
           Latih Model Baru
         </CardTitle>
@@ -201,7 +200,7 @@ export function TrainForm() {
               <TrainingDataUpload onFileChange={handleFileChange} />
             </div>
           </div>
-        </form>{" "}
+        </form>
         <SubmitButton
           isLoading={state.isLoading}
           disabled={state.isLoading || state.isParsingCsv || !isFormValid}

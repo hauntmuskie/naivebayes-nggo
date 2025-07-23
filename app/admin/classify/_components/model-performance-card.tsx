@@ -1,3 +1,4 @@
+import { Label } from "@/components/ui/label";
 import { ModelsWithMetrics } from "@/database/schema";
 import { BarChart3 } from "lucide-react";
 
@@ -10,10 +11,10 @@ export function ModelPerformanceCard({ model }: ModelPerformanceCardProps) {
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium flex items-center gap-2">
+      <Label className="text-sm font-medium flex items-center gap-2">
         <BarChart3 className="h-4 w-4" />
         Performa Model
-      </label>
+      </Label>
       <div className="p-3 bg-muted/50 rounded-lg">
         <div className="text-xl sm:text-2xl font-bold text-green-400">
           {(model.accuracy * 100).toFixed(1)}%

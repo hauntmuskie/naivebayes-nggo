@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { ClassificationHistorySelect } from "@/database/schema";
 import { format } from "date-fns";
-import { useConfirmationDialog } from "@/components/confirmation-dialog";
+import { useConfirmationDialog } from "@/hooks/use-dialog";
 
 interface HistoryCardProps {
   item: ClassificationHistorySelect;

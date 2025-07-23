@@ -13,7 +13,6 @@ export function TrainingDataUpload({
 }: TrainingDataUploadProps) {
   return (
     <div className="h-full flex flex-col">
-      {" "}
       <FileUpload
         accept=".csv"
         label="Data Pelatihan"

@@ -9,7 +9,7 @@ import { Calendar, TrendingUp, Trash2, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useConfirmationDialog } from "@/components/confirmation-dialog";
+import { useConfirmationDialog } from "@/hooks/use-dialog";
 
 export function ModelCard({ model }: { model: ModelsWithMetrics }) {
   const [isDeleting, setIsDeleting] = useState(false);
