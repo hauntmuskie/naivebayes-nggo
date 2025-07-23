@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { LucideIcon, Printer, Eye } from "lucide-react";
@@ -34,7 +33,7 @@ const iconColorMap = {
 export function ReportCard({ report }: ReportCardProps) {
   const IconComponent = report.icon;
   return (
-    <Card className="group hover:shadow-lg transition-all duration-200 border-border/40 h-full flex flex-col">
+    <Card className="hover:shadow-lg transition-all duration-200 border-border/40 h-full flex flex-col w-full">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -44,33 +43,15 @@ export function ReportCard({ report }: ReportCardProps) {
               />
             </div>
             <div>
-              <CardTitle className="text-lg">{report.title}</CardTitle>
-              <Badge variant="secondary" className="mt-1">
-                {report.stats}
-              </Badge>
+              <CardTitle className="text-lg text-center">
+                {report.title}
+              </CardTitle>
             </div>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4 flex-1 flex flex-col">
-        <p className="text-sm text-muted-foreground leading-relaxed h-12 overflow-hidden">
-          {report.description}
-        </p>
-        {report.features && report.features.length > 0 && (
-          <div className="space-y-2 flex-1">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              Fitur Laporan
-            </p>
-            <div className="flex flex-wrap gap-1">
-              {report.features.map((feature, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {feature}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        )}{" "}
-        <div className="flex gap-2 pt-2 mt-auto">
+      <CardContent className="flex-1 flex flex-col">
+        <div className="flex gap-2">
           <Link
             href={`/admin/reports/${report.id}`}
             className="flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex-1"

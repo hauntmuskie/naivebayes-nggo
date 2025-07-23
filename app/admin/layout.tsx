@@ -8,8 +8,8 @@ export default async function AdminLayout({
   return (
     <>
       <NavBar />
-      <div className="lg:ml-64 print:ml-0 --font-inter">
-        <div className="p-3 lg:p-5 pb-20 lg:pb-6 print:p-0">{children}</div>
+      <div className="lg:ml-64 print:ml-0">
+        <div className="p-3 lg:p-5 pb-20 lg:pb-6">{children}</div>
       </div>
     </>
   );
