@@ -5,6 +5,7 @@ import { HistoryGrid } from "./_components/history-grid";
 import { HistoryActions } from "./_components/history-actions";
 
 export const revalidate = 60;
+export const dynamic = "force-static";
 
 export async function generateMetadata() {
   return {
