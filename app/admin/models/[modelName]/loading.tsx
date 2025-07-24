@@ -3,8 +3,8 @@ import { LoadingState } from "@/components/loading-state";
 export default function ModelDetailLoading() {
   return (
     <LoadingState
-      title="Loading Model Details..."
-      description="Fetching model metrics and performance data"
+      title="Memuat Detail Model..."
+      description="Mengambil metrik model dan data performa"
       variant="fullpage"
     />
   );

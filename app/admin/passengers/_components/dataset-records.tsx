@@ -113,7 +113,7 @@ export function DatasetRecords({ records }: DatasetRecordsTableProps) {
   }, []);
 
   const handleDeleteRecord = useCallback(
-    (id: string, recordData: any) => {
+    (id: string) => {
       openDialog({
         title: "Hapus Record Dataset",
         description: `Apakah Anda yakin ingin menghapus record dengan ID "${id}"? Tindakan ini tidak dapat dibatalkan.`,
@@ -248,16 +248,11 @@ export function DatasetRecords({ records }: DatasetRecordsTableProps) {
           <CardTitle className="flex items-center justify-between">
             <span>Catatan Dataset</span>
             <div className="flex items-center gap-3">
-              <Badge variant="outline">
-                {filteredRecords.length} dari {records.length} catatan
-              </Badge>
               {records.length > 0 && (
                 <Button
                   variant="destructive"
-                  size="sm"
                   onClick={handleDeleteAll}
                   disabled={deletingAll}
-                  className="h-7"
                 >
                   <Trash2 className="h-3 w-3 mr-1" />
                   {deletingAll ? "Menghapus..." : "Hapus Semua"}
@@ -352,9 +347,7 @@ export function DatasetRecords({ records }: DatasetRecordsTableProps) {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() =>
-                              handleDeleteRecord(record.id, record.rawData)
-                            }
+                            onClick={() => handleDeleteRecord(record.id)}
                             disabled={deletingId === record.id}
                             className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
                           >

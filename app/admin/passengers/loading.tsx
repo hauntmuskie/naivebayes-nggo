@@ -3,8 +3,8 @@ import { LoadingState } from "@/components/loading-state";
 export default function PassengersLoading() {
   return (
     <LoadingState
-      title="Loading Dataset Records..."
-      description="Fetching passenger data and statistics"
+      title="Memuat Data Penumpang..."
+      description="Mengambil data penumpang dan statistik"
       variant="fullpage"
     />
   );

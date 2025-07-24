@@ -2,7 +2,7 @@ import { fetchModels } from "@/_actions";
 import { MetricsCard } from "@/app/admin/models/_components/metrics-card";
 import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 
 export const revalidate = 600;
@@ -45,28 +45,27 @@ export default async function ModelDetailPage({
 
   return (
     <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
-      <div className="flex items-center gap-2 mb-6">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 flex-shrink-0"
-          asChild
-        >
-          <Link href="/admin/models">
-            <ChevronLeft size={18} /> Kembali
+      <div className="mb-6 flex flex-col gap-2">
+        <Button variant="secondary" className="w-fit mb-3" asChild>
+          <Link
+            href="/admin/models"
+            className="inline-flex items-center gap-2"
+            aria-label="Kembali"
+          >
+            <ChevronLeft size={18} />
+            Kembali
           </Link>
         </Button>
-        <div className="flex items-center gap-4 flex-1">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">
-            {model.modelName}
-          </h1>
-          <Button className="ml-auto" asChild>
-            <Link
-              href={`/admin/classify?model=${encodeURIComponent(model.modelName)}`}
-            >
-              Klasifikasi Data
-            </Link>
-          </Button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-accent/40 px-3 py-1.5 rounded-md">
+            <BrainCircuit className="h-6 w-6 text-purple-500" />
+            <span className="text-base sm:text-lg font-semibold text-muted-foreground">
+              Model:
+            </span>
+            <span className="text-base sm:text-lg font-medium tracking-tight">
+              {model.modelName}
+            </span>
+          </div>
         </div>
       </div>
 

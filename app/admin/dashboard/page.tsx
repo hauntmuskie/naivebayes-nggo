@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ModelCard } from "@/components/model-card";
+import { ModelCard } from "@/app/admin/models/catalog/_components/model-card";
 import { PageHeader } from "@/components/page-header";
 import { checkHealth, fetchModels } from "@/_actions";
 import { Metadata } from "next";

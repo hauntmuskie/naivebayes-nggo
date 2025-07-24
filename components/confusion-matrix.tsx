@@ -48,20 +48,20 @@ export function ConfusionMatrix({ metrics, classes }: ConfusionMatrixProps) {
               Confusion Matrix
             </CardTitle>
             <p className="text-sm text-muted-foreground">
-              Actual vs Predicted classifications
+              Klasifikasi Aktual vs Prediksi
             </p>
           </CardHeader>
           <CardContent>
             <div className="text-center mb-4">
               <span className="text-sm font-medium text-muted-foreground">
-                Predicted
+                Prediksi
               </span>
             </div>
 
             <div className="flex items-start gap-4">
               <div className="flex items-center h-full pt-8">
                 <span className="text-sm font-medium text-muted-foreground -rotate-90 whitespace-nowrap">
-                  Actual
+                  Aktual
                 </span>
               </div>
 
@@ -120,11 +120,11 @@ export function ConfusionMatrix({ metrics, classes }: ConfusionMatrixProps) {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1">
                   <div className="w-3 h-3 bg-green-900/30 border border-border"></div>
-                  <span>Correct predictions</span>
+                  <span>Prediksi benar</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <div className="w-3 h-3 bg-red-900/30 border border-border"></div>
-                  <span>Incorrect predictions</span>
+                  <span>Prediksi salah</span>
                 </div>
               </div>
             </div>

@@ -95,21 +95,26 @@ export default async function ClassificationDetailsPage({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        {" "}
-        <div className="flex items-center gap-4">
-          <Link href="/admin/classify/history">
-            <Button variant="outline">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Kembali
-            </Button>
+      <div className="flex flex-col gap-2 mb-6">
+        <Button variant="secondary" className="w-fit mb-3" asChild>
+          <Link
+            href="/admin/classify/history"
+            className="inline-flex items-center gap-2"
+            aria-label="Kembali"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Kembali
           </Link>
-          <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              <FileText className="h-6 w-6 text-purple-500" />
+        </Button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-accent/40 px-3 py-1.5 rounded-md">
+            <FileText className="h-6 w-6 text-purple-500" />
+            <span className="text-base sm:text-lg font-semibold text-muted-foreground">
+              File:
+            </span>
+            <span className="text-base sm:text-lg font-medium tracking-tight">
               {classification.fileName}
-            </h1>
-            <p className="text-muted-foreground">Detail Hasil Klasifikasi</p>
+            </span>
           </div>
         </div>
       </div>

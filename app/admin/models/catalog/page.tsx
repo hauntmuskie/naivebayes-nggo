@@ -1,5 +1,5 @@
 import { fetchModels } from "@/_actions";
-import { ModelCard } from "@/components/model-card";
+import { ModelCard } from "@/app/admin/models/catalog/_components/model-card";
 import { PageHeader } from "@/components/page-header";
 import { EmptyState } from "@/components/empty-state";
 

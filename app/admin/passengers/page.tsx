@@ -28,8 +28,8 @@ export default async function DatasetRecordsPage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       <PageHeader
-        title="Catatan Dataset"
-        description="Kelola catatan dataset dari file CSV yang diunggah dan klasifikasi"
+        title="Catatan Dataset (Penumpang)"
+        description="Kelola catatan dataset penumpang dari file CSV yang diunggah dan klasifikasi"
         badge={{
           text: `${totalRecords} total catatan${totalRecords !== 1 ? "" : ""}`,
           variant: totalRecords > 0 ? "success" : "secondary",

@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 import GapuraAngkasaLogo from "@/public/gapura-angkasa.jpeg";
 import { PrintButton } from "./print-button";
@@ -32,19 +33,7 @@ export function ReportLayout({
             onClick={onBack}
             className="px-4 py-2 rounded-md shadow-lg transition-colors duration-200 flex items-center gap-2"
           >
-            <svg
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
+            <ArrowLeft className="h-4 w-4" />
             Kembali
           </Button>
         )}
@@ -98,7 +87,7 @@ export function ReportLayout({
 
           {/* Footer */}
           <div className="mt-16 flex w-full justify-end items-end report-footer">
-            <div className="">
+            <div className="text-right mr-5">
               <p className="mb-2">
                 Jakarta,{" "}
                 {new Date().toLocaleDateString("id-ID", {
@@ -107,8 +96,8 @@ export function ReportLayout({
                   year: "numeric",
                 })}
               </p>
-              <p className="mb-16">Tim Divisi IT</p>
-              <p className="inline-block min-w-[200px] pb-1">Ivan Hamdayani</p>
+              <p className="mb-10">Tim Divisi IT</p>
+              <p className="inline-block min-w-[120px] pb-1">Ivan Hamdayani</p>
             </div>
           </div>
         </div>

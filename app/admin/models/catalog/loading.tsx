@@ -3,8 +3,8 @@ import { LoadingState } from "@/components/loading-state";
 export default function ModelCatalogLoading() {
   return (
     <LoadingState
-      title="Loading Model Catalog..."
-      description="Fetching your model collection"
+      title="Memuat Katalog Model..."
+      description="Mengambil koleksi model Anda"
       variant="fullpage"
     />
   );

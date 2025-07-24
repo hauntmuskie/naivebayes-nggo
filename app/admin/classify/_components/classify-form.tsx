@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target } from "lucide-react";
+import { Settings } from "lucide-react";
 import {
   ModelsWithMetrics,
   ClassificationsSelect,
@@ -197,7 +197,7 @@ export function ClassifyForm({
     <Card className="border-0 shadow-sm overflow-hidden">
       <CardHeader className="pb-3 border-b border-border">
         <CardTitle className="flex items-center gap-2 font-medium text-base sm:text-lg">
-          <Target className="h-4 w-4 sm:h-5 sm:w-5" />
+          <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
           Pengaturan Klasifikasi
         </CardTitle>
       </CardHeader>
@@ -235,7 +235,7 @@ export function ClassifyForm({
           onSubmit={handleSubmit}
           loadingText="Memproses Klasifikasi..."
           submitText="Klasifikasi Data"
-          icon={Target}
+          icon={Settings}
           className="w-full mt-4 sm:mt-6 rounded-none font-normal border border-border hover:bg-accent text-foreground bg-secondary"
         />
       </CardContent>
