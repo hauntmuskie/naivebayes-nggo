@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Dasbor - Pengklasifikasi Naive Bayes",
+    title: "PT Gapura Angkasa - Dasbor",
     description:
       "Gambaran umum model pembelajaran mesin dan metrik kinerja Anda",
     other: {
@@ -44,8 +44,8 @@ export default async function DashboardPage() {
           badge={{
             text:
               healthStatus.status === "online"
-                ? "Sistem Online"
-                : "Sistem Offline",
+                ? "API Terhubung"
+                : "API Terputus",
             variant: healthStatus.status === "online" ? "success" : "error",
           }}
         />

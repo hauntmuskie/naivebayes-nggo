@@ -2,17 +2,12 @@ import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-poppins",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -35,14 +30,21 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} antialiased min-h-screen font-sans bg-background text-foreground`}
       >
-        <div className="flex min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-          <div className="flex-1 flex flex-col min-w-0">
-            <main className="flex-1 w-full p-3">
-              <div className="min-h-full">{children}</div>
-            </main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+            <div className="flex-1 flex flex-col min-w-0">
+              <main className="flex-1 w-full p-3">
+                <div className="min-h-full">{children}</div>
+              </main>
+            </div>
           </div>
-        </div>
-        <Toaster position="bottom-right" richColors />
+          <Toaster position="bottom-right" richColors />
+        </ThemeProvider>
       </body>
     </html>
   );

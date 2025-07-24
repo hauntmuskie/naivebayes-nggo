@@ -25,6 +25,8 @@ export function PrintButton({
         padding: 0 !important;
         overflow: hidden;
         font-family: "Times New Roman", Times, serif;
+        color: #000 !important;
+        background: #fff !important;
       }
 
       #report-logo {
@@ -37,6 +39,22 @@ export function PrintButton({
         margin-top: 50px;
         margin-bottom: 50px;
       }
+
+      table, th, td {
+        color: #000 !important;
+        border-color: #000 !important;
+        background: #fff !important;
+      }
+
+      th, td {
+        border: 1px solid #000 !important;
+      }
+
+      thead, tbody, tfoot, tr {
+        color: #000 !important;
+        background: #fff !important;
+      }
+    }
     `,
   });
 

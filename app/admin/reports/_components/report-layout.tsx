@@ -64,6 +64,8 @@ export function ReportLayout({
               <h1 className="text-2xl font-bold mb-2">PT. GAPURA ANGKASA</h1>
               <p className="text-sm text-gray-600 mb-1">
                 BLOK. B, Gedung Gapura Angkasa, Jl. Merpati 3 Jl. Kota Baru
+              </p>
+              <p className="text-sm text-gray-600 mb-1">
                 Bandar Kemayoran No.12 Kav.7, Daerah Khusus Ibukota Jakarta
                 10610
               </p>
