@@ -24,14 +24,14 @@ export function ReportLayout({
   const printRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="min-h-screen  relative">
+    <div className="w-full bg-white text-black">
       {/* Top Right Buttons */}
       <div className="fixed top-6 right-8 z-50 flex gap-2 items-center">
         {onBack && (
           <Button
-            variant="outline"
+            variant="default"
             onClick={onBack}
-            className="px-4 py-2 rounded-md shadow-lg transition-colors duration-200 flex items-center gap-2"
+            className="px-4 text-white py-2 rounded-md shadow-lg transition-colors duration-200 flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
             Kembali
@@ -44,9 +44,9 @@ export function ReportLayout({
       </div>
 
       {/* Printable Content */}
-      <div ref={printRef} className="my-8">
+      <div ref={printRef} className="w-full bg-white p-4">
         {/* Header */}
-        <div className="p-3 mt-5 report-header">
+        <div className="w-full mt-5 mb-8 bg-white">
           <div className="relative flex items-center justify-between">
             <Image
               src={GapuraAngkasaLogo}
@@ -69,27 +69,26 @@ export function ReportLayout({
                 Bandar Kemayoran No.12 Kav.7, Daerah Khusus Ibukota Jakarta
                 10610
               </p>
+              <p className="text-sm text-gray-600 mb-1">www.gapura.id</p>
             </div>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="my-6 border-t border-black mx-3"></div>
+        <div className="w-full border-t border-black my-6"></div>
 
         {/* Report Title */}
-        <div className="px-3">
-          <div className="text-center">
-            <h2 className="text-xl font-bold mb-8">{title}</h2>
-          </div>
+        <div className="w-full text-center mb-3">
+          <h2 className="text-xl font-bold">{title}</h2>
         </div>
 
         {/* Report Content */}
-        <div className="px-3 pb-3">
+        <div className="w-full">
           {children}
 
           {/* Footer */}
-          <div className="mt-16 flex w-full justify-end items-end report-footer">
-            <div className="text-right mr-5">
+          <div className="mt-16 w-full flex justify-end">
+            <div className="text-right">
               <p className="mb-2">
                 Jakarta,{" "}
                 {new Date().toLocaleDateString("id-ID", {
@@ -98,8 +97,8 @@ export function ReportLayout({
                   year: "numeric",
                 })}
               </p>
-              <p className="mb-10">Tim Divisi IT</p>
-              <p className="inline-block min-w-[120px] pb-1">Ivan Hamdayani</p>
+              <p className="mb-20">Mengetahui,</p>
+              <p className="inline-block min-w-[120px] pb-1">Tim Divisi IT</p>
             </div>
           </div>
         </div>

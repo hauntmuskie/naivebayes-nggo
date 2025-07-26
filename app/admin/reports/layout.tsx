@@ -5,7 +5,7 @@ export default async function ReportsLayout({
 }>) {
   return (
     <>
-      <main className="p-0 m-0 bg-white">{children}</main>
+      <div className="p-0 m-0 my-0 min-h-0">{children}</div>
     </>
   );
 }

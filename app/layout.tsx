@@ -38,7 +38,7 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
             <div className="flex-1 flex flex-col min-w-0">
-              <main className="flex-1 w-full p-3">
+              <main className="flex-1 w-full">
                 <div className="min-h-full">{children}</div>
               </main>
             </div>

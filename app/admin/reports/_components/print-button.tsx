@@ -36,23 +36,6 @@ export function PrintButton({
 
       #report-header {
         width: 100%;
-        margin-top: 50px;
-        margin-bottom: 50px;
-      }
-
-      table, th, td {
-        color: #000 !important;
-        border-color: #000 !important;
-        background: #fff !important;
-      }
-
-      th, td {
-        border: 1px solid #000 !important;
-      }
-
-      thead, tbody, tfoot, tr {
-        color: #000 !important;
-        background: #fff !important;
       }
     }
     `,
