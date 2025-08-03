@@ -88,17 +88,38 @@ class Reports {
 }
 
 ' === RELATIONSHIPS ===
-Admin ||--o{ Model : "manages"
-Model ||--o{ Classification : "produces"
-Model ||--o{ ModelMetrics : "has"
-Admin ||--o{ DatasetRecord : "uploads"
-Admin ||--o{ ClassificationHistory : "views"
-Admin ||--o{ Reports : "accesses"
-Model ||--o{ ClassificationHistory : "recorded in"
-Model ||--o{ Reports : "analyzed in"
-Classification ||--o{ Reports : "reported in"
-DatasetRecord ||--o{ Reports : "analyzed in"
-Classification }o--|| Model : "belongs to"
-ModelMetrics }o--|| Model : "belongs to"
+' Legend:
+' ||--||  : One-to-One
+' ||--o{  : One-to-Many 
+' }o--||  : Many-to-One
+' }o--o{  : Many-to-Many
+' ||--|>  : Inheritance/Extends
+' ||..>   : Implements/Uses
+' ||--*   : Composition (strong)
+' ||--o   : Aggregation (weak)
+
+' Admin relationships
+Admin ||--o{ Model : "1 manages 0..*"
+Admin ||--o{ DatasetRecord : "1 uploads 0..*"
+Admin ||--o{ ClassificationHistory : "1 views 0..*"
+Admin ||--o{ Reports : "1 accesses 0..*"
+
+' Model relationships (core entity)
+Model ||--o{ Classification : "1 produces 0..*"
+Model ||--|| ModelMetrics : "1 has 1"
+Model ||--o{ ClassificationHistory : "1 recorded in 0..*"
+
+' Classification relationships
+Classification }o--|| Model : "0..* belongs to 1"
+Classification ||--o Reports : "0..* reported in 0..*"
+
+' ModelMetrics relationships
+ModelMetrics }o--|| Model : "1 belongs to 1"
+
+' Reports relationships (aggregation)
+Reports o--o{ Model : "0..* analyzes 0..*"
+Reports o--o{ Classification : "0..* includes 0..*"
+Reports o--o{ DatasetRecord : "0..* analyzes 0..*"
+Reports o--o{ ClassificationHistory : "0..* summarizes 0..*"
 
 @enduml

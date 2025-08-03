@@ -215,7 +215,7 @@ export function MetricsCard({
                         Skor F1
                       </TableHead>
                       <TableHead className="text-right py-3 px-4 text-sm font-bold text-muted-foreground uppercase tracking-wider">
-                        Dukungan
+                        Dukungan (Support)
                       </TableHead>
                     </TableRow>
                   </TableHeader>

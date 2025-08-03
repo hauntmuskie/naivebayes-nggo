@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Database,
@@ -12,7 +12,10 @@ import {
   History,
   Users,
   FileText,
+  LogOut,
 } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const navItems = [
   {
@@ -67,7 +70,7 @@ const navItems = [
     href: "/admin/reports",
     label: "Laporan",
     icon: <FileText size={18} className="text-emerald-500" />,
-    description: "Laporan analisis akademik",
+    description: "Laporan analisis",
     color: "text-emerald-500",
     hoverColor: "group-hover:text-emerald-400",
   },
@@ -75,11 +78,25 @@ const navItems = [
 
 export function NavBar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleLogout = () => {
+    // Clear the auth session cookie
+    document.cookie = "auth-session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    
+    toast.success("Logout berhasil!", {
+      description: "Anda telah keluar dari sistem",
+    });
+    
+    router.push("/login");
+    router.refresh();
+  };
+
   const isClient = typeof window !== "undefined";
   const currentPath = isClient && mounted ? pathname || "/" : "/";
   return (
@@ -198,6 +215,15 @@ export function NavBar() {
           </div>
         </div>
         <div className="p-4 border-t border-sidebar-border">
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            size="sm"
+            className="w-full text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700 hover:border-red-300"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Keluar
+          </Button>
           <div className="text-xs text-muted-foreground mt-2 opacity-70">
             {new Date().getFullYear()} • Gapura Angkasa
           </div>

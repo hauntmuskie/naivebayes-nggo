@@ -96,14 +96,14 @@ export default async function ReportsPage() {
       ],
     },
     {
-      id: "system-summary",
-      title: "Laporan Ringkasan Sistem Klasifikasi",
+      id: "passenger-data",
+      title: "Laporan Data Penumpang",
       description:
-        "Overview menyeluruh sistem klasifikasi Naive Bayes termasuk penggunaan, performa keseluruhan, dan statistik operasional",
+        "Laporan komprehensif mengenai data penumpang yang digunakan dalam sistem klasifikasi, termasuk statistik dan analisis",
       icon: FileText,
       color: "orange" as const,
       stats: `Akurasi rata-rata: ${avgAccuracy}%`,
-      href: "/admin/reports/system-summary",
+      href: "/admin/reports/passenger-data",
       features: [
         "Statistik Keseluruhan",
         "Usage Analytics",
@@ -117,7 +117,7 @@ export default async function ReportsPage() {
     <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Sistem Pelaporan Klasifikasi Kepuasan Penumpang"
-        description="Generate dan kelola laporan komprehensif untuk sistem klasifikasi Naive Bayes analisis kepuasan penumpang"
+        description="Lelola laporan untuk sistem klasifikasi Naive Bayes"
         badge={{
           text: `${reports.length} jenis laporan tersedia`,
           variant: "success",
