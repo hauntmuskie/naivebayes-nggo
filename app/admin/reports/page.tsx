@@ -6,7 +6,6 @@ import {
 
 import { PageHeader } from "@/components/page-header";
 import { ReportCard } from "@/app/admin/reports/_components/report-card";
-import { Card, CardContent } from "@/components/ui/card";
 
 import { FileText, BarChart3, Database, TrendingUp } from "lucide-react";
 import { Metadata } from "next";
@@ -18,11 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Laporan - Pengklasifikasi Naive Bayes",
     description:
-      "Buat dan lihat laporan komprehensif untuk model pembelajaran mesin dan klasifikasi Anda",
+      "Buat dan lihat laporan komprehensif untuk model pembelajaran mesin dan klasifikasi",
     openGraph: {
-      title: "Laporan - Pengklasifikasi Naive Bayes",
+      title: "Laporan - Klasifikasi Naive Bayes",
       description:
-        "Buat dan lihat laporan komprehensif untuk model pembelajaran mesin dan klasifikasi Anda",
+        "Buat dan lihat laporan komprehensif untuk model pembelajaran mesin dan klasifikasi",
     },
   };
 }
@@ -116,8 +115,8 @@ export default async function ReportsPage() {
   return (
     <div className="space-y-6 sm:space-y-8">
       <PageHeader
-        title="Sistem Pelaporan Klasifikasi Kepuasan Penumpang"
-        description="Lelola laporan untuk sistem klasifikasi Naive Bayes"
+        title="Laporan Klasifikasi Kepuasan Penumpang"
+        description="Lihat laporan"
         badge={{
           text: `${reports.length} jenis laporan tersedia`,
           variant: "success",

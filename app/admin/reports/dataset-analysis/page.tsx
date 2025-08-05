@@ -21,11 +21,36 @@ function analyzeFeatures(records: any[]): any[] {
     if (!isNumeric) {
       topCategories = unique.slice(0, 5);
     }
+
+    let date = "-";
+    const recordWithDate = records.find(
+      (r) => r.rawData && r.rawData[col + "Date"]
+    );
+    if (recordWithDate && recordWithDate.rawData[col + "Date"]) {
+      const d = new Date(recordWithDate.rawData[col + "Date"]);
+      if (!isNaN(d.getTime())) {
+        date = d.toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+      }
+    } else if (records[0].createdAt) {
+      const d = new Date(records[0].createdAt);
+      if (!isNaN(d.getTime())) {
+        date = d.toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+      }
+    }
     return {
       name: col,
       type: isNumeric ? "Numerik" : "Kategorikal",
       unique: unique.length,
       topCategories,
+      date,
     };
   });
   return features;
@@ -62,10 +87,7 @@ export default function DatasetAnalysisReportPage() {
   }
 
   return (
-    <ReportLayout
-      title="LAPORAN ANALISIS DATASET PENUMPANG"
-      onBack={() => router.back()}
-    >
+    <ReportLayout title="LAPORAN ANALISIS DATASET" onBack={() => router.back()}>
       <div className="bg-white text-black p-4">
         <div className="mb-4">
           <p className="font-semibold">Total Fitur: {data.length}</p>
@@ -80,6 +102,9 @@ export default function DatasetAnalysisReportPage() {
                 <th className="border border-black text-center">Keunikan</th>
                 <th className="border border-black text-center">
                   Top Kategori
+                </th>
+                <th className="border border-black text-center">
+                  Tanggal Data
                 </th>
               </tr>
             </thead>
@@ -98,6 +123,9 @@ export default function DatasetAnalysisReportPage() {
                   </td>
                   <td className="border border-black text-center">
                     {item.topCategories ? item.topCategories.join(", ") : "-"}
+                  </td>
+                  <td className="border border-black text-center">
+                    {item.date}
                   </td>
                 </tr>
               ))}

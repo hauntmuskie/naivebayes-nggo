@@ -24,7 +24,11 @@ export default function ModelPerformanceReportPage() {
             id: m.id,
             name: m.modelName,
             trainedAt: m.createdAt
-              ? new Date(m.createdAt).toLocaleDateString()
+              ? new Date(m.createdAt).toLocaleDateString("id-ID", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })
               : "-",
             accuracy: metric ? metric.accuracy : m.accuracy,
             precision: metric ? metric.precision : 0,

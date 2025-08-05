@@ -9,11 +9,11 @@ export const dynamic = "force-static";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Catatan Dataset - Pengklasifikasi Naive Bayes",
+    title: "Catatan Dataset - Klasifikasi Naive Bayes",
     description:
       "Kelola catatan dataset dari file CSV yang diunggah dan klasifikasi",
     openGraph: {
-      title: "Catatan Dataset - Pengklasifikasi Naive Bayes",
+      title: "Catatan Dataset - Klasifikasi Naive Bayes",
       description:
         "Kelola catatan dataset dari file CSV yang diunggah dan klasifikasi",
     },
@@ -29,7 +29,7 @@ export default async function DatasetRecordsPage() {
     <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Catatan Dataset (Penumpang)"
-        description="Kelola catatan dataset penumpang dari file CSV yang diunggah dan klasifikasi"
+        description="Kelola catatan dataset penumpang"
         badge={{
           text: `${totalRecords} total catatan${totalRecords !== 1 ? "" : ""}`,
           variant: totalRecords > 0 ? "success" : "secondary",

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-import GapuraAngkasaLogo from "@/public/gapura-angkasa.jpeg";
+import GapuraAngkasaLogo from "@/public/gapura_angkasa.png";
 import { PrintButton } from "./print-button";
 
 interface ReportLayoutProps {
@@ -86,12 +86,12 @@ export function ReportLayout({
         <div className="w-full">
           {children}
 
-          {/* Footer */}
           <div className="mt-16 w-full flex justify-end">
-            <div className="text-right">
+            <div className="text-right mr-8">
               <p className="mb-2">
                 Jakarta,{" "}
                 {new Date().toLocaleDateString("id-ID", {
+                  weekday: "long",
                   day: "numeric",
                   month: "long",
                   year: "numeric",

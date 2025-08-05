@@ -16,7 +16,7 @@ export default async function ClassifyDataPage({
     <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Klasifikasi Data"
-        description="Unggah data Anda dan dapatkan prediksi dari model terlatih"
+        description="Unggah data dan dapatkan prediksi dari model terlatih"
         badge={{
           text: `${models.length} model${
             models.length !== 1 ? "" : ""

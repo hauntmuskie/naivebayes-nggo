@@ -9,12 +9,11 @@ export const dynamic = "force-static";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Latih Model - Pengklasifikasi Naive Bayes",
+    title: "Latih Model - Klasifikasi Naive Bayes",
     description: "Latih model pembelajaran mesin baru menggunakan dataset Anda",
     openGraph: {
-      title: "Latih Model - Pengklasifikasi Naive Bayes",
-      description:
-        "Latih model pembelajaran mesin baru menggunakan dataset Anda",
+      title: "Latih Model - Klasifikasi Naive Bayes",
+      description: "Latih model pembelajaran mesin baru",
     },
   };
 }
@@ -26,7 +25,7 @@ export default async function ModelsPage() {
     <div className="space-y-6 sm:space-y-8">
       <PageHeader
         title="Latih Model"
-        description="Buat model pembelajaran mesin baru dan kelola model yang sudah ada"
+        description="Buat model baru dan kelola model yang sudah ada"
         badge={{
           text: `${models.length} model${
             models.length !== 1 ? "" : ""

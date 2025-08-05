@@ -17,6 +17,8 @@ import {
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
+import GapuraAngkasaLogo from "@/public/gapura_angkasa.png";
+
 const navItems = [
   {
     href: "/admin/dashboard",
@@ -87,12 +89,13 @@ export function NavBar() {
 
   const handleLogout = () => {
     // Clear the auth session cookie
-    document.cookie = "auth-session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    
+    document.cookie =
+      "auth-session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
     toast.success("Logout berhasil!", {
       description: "Anda telah keluar dari sistem",
     });
-    
+
     router.push("/login");
     router.refresh();
   };
@@ -108,20 +111,18 @@ export function NavBar() {
         style={{ visibility: mounted ? "visible" : "hidden" }}
       >
         <div className="p-6 border-b border-sidebar-border">
-          <Link href="/admin/dashboard" className="flex items-center gap-3">
-            <div className="h-10 w-30 relative overflow-hidden rounded-lg shadow-sm">
-              <Image
-                src="/gapura-angkasa.jpeg"
-                alt="Gapura Angkasa Logo"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground uppercase tracking-wider">
-                Naive Bayes Classifier
-              </span>
-            </div>
+          <Link
+            href="/admin/dashboard"
+            className="flex justify-center rounded-2xl items-center gap-3"
+          >
+            <Image
+              src={GapuraAngkasaLogo}
+              alt="Gapura Angkasa Logo"
+              width={120}
+              height={120}
+              priority
+              className="object-cover p-2"
+            />
           </Link>
         </div>
         <div className="flex-1 p-4 space-y-2">
@@ -136,7 +137,6 @@ export function NavBar() {
                   currentPath !== "/admin" &&
                   item.href !== "/admin"
                 : currentPath === item.href;
-              const isRootPage = currentPath === item.href;
               const showSubItems =
                 hasSubItems &&
                 currentPath.startsWith(item.href) &&

@@ -26,7 +26,13 @@ export default function ClassificationResultsReportPage() {
           model: modelMap[c.modelId] || c.modelId,
           predictedClass: c.predictedClass,
           confidence: c.confidence,
-          date: c.createdAt ? new Date(c.createdAt).toLocaleDateString() : "-",
+          date: c.createdAt
+            ? new Date(c.createdAt).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })
+            : "-",
         }));
         setData(mapped);
       } catch (e) {
