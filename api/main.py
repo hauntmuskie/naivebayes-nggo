@@ -25,7 +25,6 @@ from sklearn.metrics import (
 from sklearn.naive_bayes import CategoricalNB
 from sklearn.preprocessing import LabelEncoder, OrdinalEncoder
 
-# Configuration
 load_dotenv()
 
 # =============================================================================
@@ -244,14 +243,12 @@ async def train_model(
 ):
     """Train a new Naive Bayes model."""
     try:
-        # Read and validate data
         content = await file.read()
         df = pd.read_csv(io.StringIO(content.decode('utf-8')))
         
         if target_column not in df.columns:
             raise HTTPException(status_code=400, detail=f"Target column '{target_column}' not found in the dataset")
         
-        # Prepare feature columns
         all_columns = df.columns.tolist()
         
         if feature_columns:
@@ -268,10 +265,9 @@ async def train_model(
         if not feature_columns:
             raise HTTPException(status_code=400, detail="No feature columns found")
         
-        # Prepare training data
         X = df[feature_columns].copy()
         y = df[target_column].copy()
-          # Validate class distribution
+
         class_counts = y.value_counts()
         min_class_count = class_counts.min()
         
@@ -281,29 +277,24 @@ async def train_model(
                 detail=f"Not enough samples for training. Minimum class count is {min_class_count}, need at least 1 sample per class."
             )
         
-        # Use entire dataset for training (no splitting)
         X_train = X.copy()
         y_train = y.copy()
-          # Encode features
+
         encoders = {}
         X_train_encoded = X_train.copy()
         
         for column in feature_columns:
-            # Get the number of unique categories to determine the unknown_value
             unique_categories = len(X_train[column].unique())
             encoder = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=unique_categories)
             X_train_encoded[column] = encoder.fit_transform(X_train[[column]])
             encoders[column] = encoder
         
-        # Encode target
         label_encoder = LabelEncoder()
         y_train_encoded = label_encoder.fit_transform(y_train)
         
-        # Train model on entire dataset
         model = CategoricalNB()
         model.fit(X_train_encoded, y_train_encoded)
         
-        # Calculate training accuracy (since we're using the entire dataset)
         y_pred = model.predict(X_train_encoded)
         accuracy = accuracy_score(y_train_encoded, y_pred)
         
@@ -314,7 +305,6 @@ async def train_model(
         
         cm = confusion_matrix(y_train_encoded, y_pred)
         
-        # Serialize model and encoders
         model_buffer = io.BytesIO()
         joblib.dump(model, model_buffer)
         model_buffer.seek(0)
@@ -330,7 +320,6 @@ async def train_model(
         label_encoder_buffer.seek(0)
         label_encoder_data = base64.b64encode(label_encoder_buffer.read()).decode('utf-8')
         
-        # Prepare metrics
         metrics = {
             "accuracy": float(accuracy),
             "precision": float(precision),
@@ -340,7 +329,6 @@ async def train_model(
             "confusionMatrix": cm.tolist()
         }
         
-        # Store model info
         model_info = {
             "modelName": model_name,
             "targetColumn": target_column,
@@ -385,7 +373,6 @@ async def classify_data(
 ):
     """Classify data using a trained model."""
     try:
-        # Initialize models if needed
         if not models_metadata:
             print("Models metadata is empty, initializing from database...")
             initialize_models_from_db()
@@ -401,7 +388,6 @@ async def classify_data(
                 detail=f"Model '{model_name}' not found. Available models: {available_models}"
             )
         
-        # Load model and encoders
         model_info = models_metadata[model_name]
         
         model_data = io.BytesIO(base64.b64decode(model_info["modelData"]))
@@ -412,11 +398,9 @@ async def classify_data(
         encoders = joblib.load(encoders_data)
         label_encoder = joblib.load(label_encoder_data)
         
-        # Read and validate data
         content = await file.read()
         df = pd.read_csv(io.StringIO(content.decode('utf-8')))
         
-        # Auto-detect ID column if not provided
         if not id_column:
             common_id_columns = ['id', 'ID', 'Id', 'index', 'Index', 'PassengerId', 'passenger_id']
             for col in common_id_columns:
@@ -424,11 +408,9 @@ async def classify_data(
                     id_column = col
                     break
                     
-        # Auto-detect actual column if not provided
         if not actual_column and model_info["targetColumn"] in df.columns:
             actual_column = model_info["targetColumn"]
         
-        # Validate required columns
         missing_columns = []
         for column in model_info["featureColumns"]:
             if column not in df.columns:
@@ -443,16 +425,14 @@ async def classify_data(
                     "required_columns": model_info["featureColumns"]
                 }
             )
-          # Prepare features
+        
         X = df[model_info["featureColumns"]].copy()
         X_encoded = X.copy()
         
-        # Encode features with error handling for unknown categories
         unknown_categories_found = []
         for column in model_info["featureColumns"]:
             encoder = encoders[column]
             
-            # Check for unknown categories
             training_categories = set(encoder.categories_[0])
             data_categories = set(X[column].unique())
             unknown_cats = data_categories - training_categories
@@ -464,7 +444,6 @@ async def classify_data(
                     "known_values": list(training_categories)
                 })
             
-            # Transform the data
             try:
                 X_encoded[column] = encoder.transform(X[[column]])
             except Exception as e:
@@ -476,7 +455,6 @@ async def classify_data(
                     }
                 )
         
-        # Check for negative values (which shouldn't happen now, but just in case)
         if (X_encoded < 0).any().any():
             negative_columns = [col for col in X_encoded.columns if (X_encoded[col] < 0).any()]
             raise HTTPException(
@@ -488,13 +466,11 @@ async def classify_data(
                 }
             )
         
-        # Make predictions
         y_pred_proba = model.predict_proba(X_encoded)
         y_pred = model.predict(X_encoded)
         
         predictions = label_encoder.inverse_transform(y_pred)
         
-        # Prepare results
         results = []
         
         for i in range(len(df)):
@@ -530,16 +506,13 @@ async def classify_data(
                 valid_indices = [i for i, a in enumerate(actuals) if a in label_encoder.classes_]
                 valid_preds = y_pred[valid_indices]
                 
-                # Get unique classes present in the predictions and actuals
                 unique_true_classes = np.unique(y_true)
                 unique_pred_classes = np.unique(valid_preds)
                 unique_classes = np.unique(np.concatenate([unique_true_classes, unique_pred_classes]))
                 
-                # Get target names only for classes that are actually present
                 present_class_names = [label_encoder.classes_[i] for i in unique_classes]
                 
                 try:
-                    # Use labels parameter to specify which classes to include in the report
                     report = classification_report(
                         y_true, 
                         valid_preds, 
@@ -549,9 +522,9 @@ async def classify_data(
                         zero_division=0
                     )
                     cm = confusion_matrix(y_true, valid_preds, labels=unique_classes)
+        
                 except Exception as e:
                     print(f"Error generating classification report: {str(e)}")
-                    # Fallback: generate report without target_names
                     report = classification_report(
                         y_true, 
                         valid_preds, 
