@@ -51,27 +51,25 @@ export default function SystemSummaryReportPage() {
       <div className="bg-white text-black p-4">
         <div className="mb-4">
           <p className="font-semibold">Data Penumpang (Training & Testing):</p>
-          <p className="text-sm text-gray-600 mt-1">
-            Total: {data.length} record
-          </p>
+          <p className="text-sm mt-1">Total: {data.length} record</p>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full border-collapse">
             <thead>
               <tr>
-                <th className="border border-black text-center px-2 py-1">
+                <th className="border border-black text-center px-1 py-0.5">
                   No
                 </th>
-                <th className="border border-black text-center px-2 py-1">
+                <th className="border border-black text-center px-1 py-0.5">
                   ID Record
                 </th>
-                <th className="border border-black text-center px-2 py-1">
+                <th className="border border-black text-center px-1 py-0.5">
                   Nama File
                 </th>
-                <th className="border border-black text-center px-2 py-1">
+                <th className="border border-black text-center px-1 py-0.5">
                   Jenis Dataset
                 </th>
-                <th className="border border-black text-center px-2 py-1">
+                <th className="border border-black text-center px-1 py-0.5">
                   Tanggal Upload
                 </th>
               </tr>
@@ -79,23 +77,23 @@ export default function SystemSummaryReportPage() {
             <tbody>
               {data.map((item, idx) => (
                 <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="border border-black text-center px-2 py-1">
+                  <td className="border border-black text-center px-1 py-0.5">
                     {idx + 1}
                   </td>
-                  <td className="border border-black text-center px-2 py-1">
+                  <td className="border border-black text-center px-1 py-0.5">
                     {item.recordId}
                   </td>
-                  <td className="border border-black text-center px-2 py-1">
+                  <td className="border border-black text-center px-1 py-0.5">
                     {item.fileName}
                   </td>
-                  <td className="border border-black text-center px-2 py-1">
+                  <td className="border border-black text-center px-1 py-0.5">
                     {item.datasetType === "training"
                       ? "Training"
                       : item.datasetType === "testing"
                       ? "Testing"
                       : "Validation"}
                   </td>
-                  <td className="border border-black text-center px-2 py-1 text-xs">
+                  <td className="border border-black text-center px-1 py-0.5 text-xs">
                     {new Date(item.createdAt).toLocaleDateString("id-ID")}
                   </td>
                 </tr>
@@ -104,7 +102,7 @@ export default function SystemSummaryReportPage() {
                 <tr>
                   <td
                     colSpan={5}
-                    className="border border-black text-center px-2 py-4 text-gray-500"
+                    className="border border-black text-center px-1 py-2 text-gray-500"
                   >
                     Tidak ada data penumpang
                   </td>

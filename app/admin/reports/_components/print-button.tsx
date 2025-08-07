@@ -29,6 +29,12 @@ export function PrintButton({
         background: #fff !important;
       }
 
+      th.border, td.border {
+        padding: 2px 4px !important;
+        font-size: 12px !important;
+        border: 1px solid #000 !important;
+      }
+
       #report-logo {
         max-width: 150px;
         height: auto;

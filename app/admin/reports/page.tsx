@@ -80,7 +80,7 @@ export default async function ReportsPage() {
     },
     {
       id: "dataset-analysis",
-      title: "Laporan Analisis Dataset Penumpang",
+      title: "Laporan Analisis Dataset",
       description:
         "Analisis mendalam dataset penumpang yang digunakan untuk training dan testing model klasifikasi kepuasan",
       icon: Database,
