@@ -94,7 +94,11 @@ export default function SystemSummaryReportPage() {
                       : "Validation"}
                   </td>
                   <td className="border border-black text-center px-1 py-0.5 text-xs">
-                    {new Date(item.createdAt).toLocaleDateString("id-ID")}
+                    {new Date(item.createdAt).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
                   </td>
                 </tr>
               ))}

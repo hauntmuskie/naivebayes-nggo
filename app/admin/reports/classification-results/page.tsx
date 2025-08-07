@@ -27,7 +27,7 @@ export default function ClassificationResultsReportPage() {
           predictedClass: c.predictedClass,
           confidence: c.confidence,
           date: c.createdAt
-            ? new Date(c.createdAt).toLocaleDateString("en-GB", {
+            ? new Date(c.createdAt).toLocaleDateString("id-ID", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",

@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "api-dev": "pip3 install -r requirements.txt && python -m uvicorn api.main:app --reload",
-    "next-dev": "next dev --turbopack",
-    "dev": "concurrently \"bun --b run next-dev\" \"bun --b run api-dev\"",
+    "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "next lint"
