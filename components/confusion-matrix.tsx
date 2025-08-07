@@ -33,7 +33,7 @@ function MatrixCell({
   return (
     <TableCell className={`text-center min-w-16 ${bgColor}`}>
       <div className="text-sm font-mono font-semibold">{value}</div>
-      <div className="text-xs text-muted-foreground">{percentage}%</div>
+      {/* <div className="text-xs text-muted-foreground">{percentage}%</div> */}
     </TableCell>
   );
 }

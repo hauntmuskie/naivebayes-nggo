@@ -7,12 +7,9 @@ import {
   Target,
   Clock,
   Database,
-  BarChart3,
   CheckCircle,
-  Activity,
 } from "lucide-react";
 import { ClassificationHistorySelect } from "@/database/schema";
-import { ConfusionMatrix } from "@/components/confusion-matrix";
 import { fetchClassificationById } from "@/_actions";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -83,15 +80,6 @@ export default async function ClassificationDetailsPage({
     }
   })();
 
-  const metrics = (() => {
-    try {
-      const parsed = JSON.parse(classification.results);
-      return parsed.metrics;
-    } catch {
-      return null;
-    }
-  })();
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -154,68 +142,7 @@ export default async function ClassificationDetailsPage({
           </CardContent>
         </Card>
       </div>
-      {/* Metrics Section */}
-      {metrics && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {" "}
-          <Card className="h-full flex flex-col border-border/40">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-blue-500" />
-                Metrik Klasifikasi
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="h-full flex flex-col">
-              <div className="grid grid-cols-2 gap-4 flex-1">
-                <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg flex flex-col justify-center items-center h-full">
-                  <div className="text-2xl font-bold text-green-600">
-                    {(metrics.accuracy * 100).toFixed(1)}%
-                  </div>
-                  <div className="text-sm text-muted-foreground">Akurasi</div>
-                </div>
-                <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex flex-col justify-center items-center h-full">
-                  <div className="text-2xl font-bold text-blue-600">
-                    {(metrics.precision * 100).toFixed(1)}%
-                  </div>
-                  <div className="text-sm text-muted-foreground">Presisi</div>
-                </div>
-                <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg flex flex-col justify-center items-center h-full">
-                  <div className="text-2xl font-bold text-purple-600">
-                    {(metrics.recall * 100).toFixed(1)}%
-                  </div>
-                  <div className="text-sm text-muted-foreground">Recall</div>
-                </div>
-                <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg flex flex-col justify-center items-center h-full">
-                  <div className="text-2xl font-bold text-orange-600">
-                    {(metrics.f1Score * 100).toFixed(1)}%
-                  </div>
-                  <div className="text-sm text-muted-foreground">Skor F1</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          {metrics.confusionMatrix && (
-            <Card className="border-border/40">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-purple-500" />
-                  Matriks Konfusi
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ConfusionMatrix
-                  metrics={metrics}
-                  classes={Object.keys(metrics.classMetrics).filter(
-                    (key) =>
-                      !["accuracy", "macro avg", "weighted avg"].includes(key)
-                  )}
-                />
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      )}
-      {/* Results Summary */}{" "}
+      {/* Results Summary */}
       <Card className="border-border/40">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -248,14 +175,9 @@ export default async function ClassificationDetailsPage({
                     >
                       {result.predictedClass}
                     </Badge>
-                    {result.actualClass && (
-                      <span className="text-sm text-muted-foreground">
-                        Aktual: {result.actualClass}
-                      </span>
-                    )}
                   </div>
                   <div className="text-sm font-medium">
-                    {(result.confidence * 100).toFixed(1)}%
+                    {(result.confidence * 100).toFixed()}%
                   </div>
                 </div>
               ))}

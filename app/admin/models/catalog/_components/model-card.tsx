@@ -50,7 +50,7 @@ export function ModelCard({ model }: { model: ModelsWithMetrics }) {
   };
 
   const accuracy = model.accuracy;
-  const accuracyPercentage = (accuracy * 100).toFixed(1);
+  const accuracyPercentage = (accuracy * 100).toFixed();
 
   return (
     <Card className="h-full border border-border/40 shadow-sm hover:shadow-lg transition-all duration-300 bg-card hover:bg-accent/5 overflow-hidden">

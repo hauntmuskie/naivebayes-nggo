@@ -17,7 +17,7 @@ export function ModelPerformanceCard({ model }: ModelPerformanceCardProps) {
       </Label>
       <div className="p-3 bg-muted/50 rounded-lg">
         <div className="text-xl sm:text-2xl font-bold text-green-400">
-          {(model.accuracy * 100).toFixed(1)}%
+          {(model.accuracy * 100).toFixed()}%
         </div>
         <div className="text-xs text-muted-foreground">Akurasi Model</div>
       </div>

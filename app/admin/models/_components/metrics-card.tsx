@@ -35,13 +35,6 @@ export function MetricsCard({
 }) {
   const { openDialog, ConfirmationDialog } = useConfirmationDialog();
 
-  const getScoreLevel = (value: number) => {
-    if (value >= 0.9)
-      return { level: "Sangat Baik", color: "text-emerald-400" };
-    if (value >= 0.8) return { level: "Baik", color: "text-green-400" };
-    if (value >= 0.7) return { level: "Cukup", color: "text-yellow-400" };
-    return { level: "Kurang", color: "text-red-400" };
-  };
   const handleDeleteModel = () => {
     if (!model) return;
 
@@ -190,7 +183,7 @@ export function MetricsCard({
                   <Target className="h-4 w-4 text-blue-400" />
                   <div className="text-right">
                     <div className="text-lg font-bold text-blue-400">
-                      {formatPercentage(metrics.accuracy)}%
+                      {Math.round(Number(formatPercentage(metrics.accuracy)))}%
                     </div>
                     <div className="text-xs text-muted-foreground uppercase tracking-wider">
                       Akurasi Keseluruhan
@@ -246,30 +239,37 @@ export function MetricsCard({
                             <TableCell className="py-4 px-4 text-right">
                               <div className="flex flex-col items-end space-y-1">
                                 <span className="text-sm font-mono font-bold text-emerald-400">
-                                  {formatPercentage(precision)}%
+                                  {Math.round(
+                                    Number(formatPercentage(precision))
+                                  )}
+                                  %
                                 </span>
                                 <span className="text-xs text-muted-foreground font-mono">
-                                  {precision.toFixed(3)}
+                                  {precision.toFixed(2)}
                                 </span>
                               </div>
                             </TableCell>
                             <TableCell className="py-4 px-4 text-right">
                               <div className="flex flex-col items-end space-y-1">
                                 <span className="text-sm font-mono font-bold text-purple-400">
-                                  {formatPercentage(recall)}%
+                                  {Math.round(Number(formatPercentage(recall)))}
+                                  %
                                 </span>
                                 <span className="text-xs text-muted-foreground font-mono">
-                                  {recall.toFixed(3)}
+                                  {recall.toFixed(2)}
                                 </span>
                               </div>
                             </TableCell>
                             <TableCell className="py-4 px-4 text-right">
                               <div className="flex flex-col items-end space-y-1">
                                 <span className="text-sm font-mono font-bold text-amber-400">
-                                  {formatPercentage(f1Score)}%
+                                  {Math.round(
+                                    Number(formatPercentage(f1Score))
+                                  )}
+                                  %
                                 </span>
                                 <span className="text-xs text-muted-foreground font-mono">
-                                  {f1Score.toFixed(3)}
+                                  {f1Score.toFixed(2)}
                                 </span>
                               </div>
                             </TableCell>
