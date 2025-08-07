@@ -70,7 +70,7 @@ export default function ModelPerformanceReportPage() {
       <div className="bg-white text-black p-4">
         <div className="mb-4">
           <p className="font-semibold">
-            Akurasi rata-rata: {avgAccuracy.toFixed(2)}%
+            Akurasi rata-rata: {avgAccuracy.toFixed()}%
           </p>
           <p>Total Model: {data.length}</p>
         </div>
@@ -101,16 +101,16 @@ export default function ModelPerformanceReportPage() {
                     {item.trainedAt}
                   </td>
                   <td className="border border-black text-center">
-                    {(item.accuracy * 100).toFixed(2)}%
+                    {(item.accuracy * 100).toFixed()}%
                   </td>
                   <td className="border border-black text-center">
-                    {(item.precision * 100).toFixed(2)}%
+                    {(item.precision * 100).toFixed()}%
                   </td>
                   <td className="border border-black text-center">
-                    {(item.recall * 100).toFixed(2)}%
+                    {(item.recall * 100).toFixed()}%
                   </td>
                   <td className="border border-black text-center">
-                    {(item.f1 * 100).toFixed(2)}%
+                    {(item.f1 * 100).toFixed()}%
                   </td>
                   {/* <td className="border border-black text-center"><ConfusionMatrix matrix={item.confusionMatrix} /></td> */}
                 </tr>

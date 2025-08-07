@@ -102,7 +102,7 @@ export default function ClassificationResultsReportPage() {
                     {item.predictedClass}
                   </td>
                   <td className="border border-black text-center">
-                    {(item.confidence * 100).toFixed(2)}%
+                    {(item.confidence * 100).toFixed()}%
                   </td>
                   <td className="border border-black text-center">
                     {item.date}
