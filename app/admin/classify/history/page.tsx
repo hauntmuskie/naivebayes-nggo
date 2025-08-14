@@ -4,16 +4,12 @@ import { EmptyState } from "@/components/empty-state";
 import { HistoryGrid } from "./_components/history-grid";
 import { HistoryActions } from "./_components/history-actions";
 
-export const revalidate = 60;
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   return {
     title: "Riwayat Klasifikasi - Pengklasifikasi Naive Bayes",
     description: "Lihat dan kelola hasil klasifikasi masa lalu Anda",
-    other: {
-      "Cache-Control": "public, max-age=60, stale-while-revalidate=120",
-    },
   };
 }
 

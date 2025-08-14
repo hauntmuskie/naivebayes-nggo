@@ -3,16 +3,12 @@ import { ModelCard } from "@/app/admin/models/catalog/_components/model-card";
 import { PageHeader } from "@/components/page-header";
 import { EmptyState } from "@/components/empty-state";
 
-export const revalidate = 300;
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   return {
     title: "Katalog Model - Pengklasifikasi Naive Bayes",
     description: "Jelajahi dan kelola model pembelajaran mesin terlatih Anda",
-    other: {
-      "Cache-Control": "public, max-age=300, stale-while-revalidate=600",
-    },
   };
 }
 
