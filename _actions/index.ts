@@ -18,6 +18,7 @@ import {
   classificationHistory,
   datasetRecords,
 } from "@/database/schema";
+
 import database from "@/database";
 import { desc, eq } from "drizzle-orm";
 import { revalidateTag, revalidatePath } from "next/cache";
@@ -198,7 +199,8 @@ export async function trainModel(formData: FormData): Promise<ModelsSelect> {
 
     revalidateTag("models");
     revalidateTag("dataset-records");
-    revalidatePath("/models");
+    revalidatePath("/admin/models");
+    revalidatePath("/admin/models/catalog");
     revalidatePath("/");
 
     return insertedModel;
@@ -248,7 +250,8 @@ export async function deleteModel(modelName: string): Promise<boolean> {
 
     revalidateTag("models");
     revalidateTag("classifications");
-    revalidatePath("/models");
+    revalidatePath("/admin/models");
+    revalidatePath("/admin/models/catalog");
     revalidatePath("/");
 
     return true;
@@ -331,6 +334,8 @@ export async function classifyData(
 
     revalidateTag("classifications");
     revalidateTag("dataset-records");
+    revalidatePath("/admin/classify");
+    revalidatePath("/admin/history");
     revalidateTag("models");
 
     return results;
@@ -366,7 +371,7 @@ export async function saveClassificationHistory(
       .returning();
 
     revalidateTag("classification-history");
-    revalidatePath("/classify/history");
+    revalidatePath("/admin/classify/history");
 
     return inserted.id;
   } catch (error) {
@@ -400,7 +405,7 @@ export async function deleteClassificationHistory(id: string): Promise<void> {
       .where(eq(classificationHistory.id, id));
 
     revalidateTag("classification-history");
-    revalidatePath("/classify/history");
+    revalidatePath("/admin/classify/history");
   } catch (error) {
     console.error("Error deleting classification history:", error);
     throw error;
