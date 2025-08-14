@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { logoutAction } from "@/_actions/auth";
 
 import GapuraAngkasaLogo from "@/public/gapura_angkasa.png";
 
@@ -87,17 +88,25 @@ export function NavBar() {
     setMounted(true);
   }, []);
 
-  const handleLogout = () => {
-    // Clear the auth session cookie
-    document.cookie =
-      "auth-session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-
-    toast.success("Logout berhasil!", {
-      description: "Anda telah keluar dari sistem",
-    });
-
-    router.push("/login");
-    router.refresh();
+  const handleLogout = async () => {
+    try {
+      const res = await logoutAction();
+      if (res?.success) {
+        toast.success("Logout berhasil!", {
+          description: "Anda telah keluar dari sistem",
+        });
+        router.push("/login");
+        router.refresh();
+      } else {
+        toast.error("Logout gagal!", {
+          description: "Terjadi kesalahan saat logout",
+        });
+      }
+    } catch (e) {
+      toast.error("Logout gagal!", {
+        description: "Terjadi kesalahan saat logout",
+      });
+    }
   };
 
   const isClient = typeof window !== "undefined";

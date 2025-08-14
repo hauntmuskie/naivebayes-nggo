@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DatasetRecordsFilters } from "@/app/admin/passengers/_components/dataset-records-filters";
+
 import {
   Table,
   TableBody,
@@ -12,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { DatasetRecordsSelect } from "@/database/schema";
 import { useState, useMemo, useCallback } from "react";
 import { useDebounce } from "use-debounce";
@@ -21,6 +23,7 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { deleteDatasetRecord, deleteAllDatasetRecords } from "@/_actions";
 import { useConfirmationDialog } from "@/hooks/use-dialog";
+import { toast } from "sonner";
 
 interface FilterState {
   datasetType: string;
@@ -117,9 +120,10 @@ export function DatasetRecords({ records }: DatasetRecordsTableProps) {
           try {
             await deleteDatasetRecord(id);
             router.refresh();
+            toast.success("Record dataset berhasil dihapus.");
           } catch (error) {
             console.error("Error deleting record:", error);
-            throw new Error("Gagal menghapus record. Silakan coba lagi.");
+            toast.error("Gagal menghapus record. Silakan coba lagi.");
           } finally {
             setDeletingId(null);
           }
@@ -141,9 +145,10 @@ export function DatasetRecords({ records }: DatasetRecordsTableProps) {
         try {
           await deleteAllDatasetRecords();
           router.refresh();
+          toast.success("Semua record dataset berhasil dihapus.");
         } catch (error) {
           console.error("Error deleting all records:", error);
-          throw new Error("Gagal menghapus semua record. Silakan coba lagi.");
+          toast.error("Gagal menghapus semua record. Silakan coba lagi.");
         } finally {
           setDeletingAll(false);
         }

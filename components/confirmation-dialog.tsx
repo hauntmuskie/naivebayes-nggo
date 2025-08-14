@@ -2,14 +2,15 @@
 
 import { useState, ReactNode } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { AlertTriangle, Loader2 } from "lucide-react";
 
 export interface ConfirmationDialogProps {
@@ -53,36 +54,33 @@ export function ConfirmationDialog({
 
   const isDialogLoading = isLoading || isSubmitting;
 
+  const actionClass =
+    variant === "destructive" ? "bg-red-600 hover:bg-red-700 text-white" : "";
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+    <AlertDialog open={isOpen} onOpenChange={onClose}>
+      <AlertDialogContent className="border border-border/40">
+        <AlertDialogHeader>
           <div className="flex items-center gap-3">
             {icon || (
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-destructive/10">
                 <AlertTriangle className="h-5 w-5 text-destructive" />
               </div>
             )}
-            <DialogTitle className="text-left">{title}</DialogTitle>
+            <AlertDialogTitle className="text-left">{title}</AlertDialogTitle>
           </div>
-          <DialogDescription className="text-left mt-2">
+          <AlertDialogDescription className="text-left mt-2">
             {description}
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter className="flex-col-reverse sm:flex-row gap-2">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            disabled={isDialogLoading}
-            className="w-full sm:w-auto"
-          >
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isDialogLoading}>
             {cancelText}
-          </Button>
-          <Button
-            variant={variant}
+          </AlertDialogCancel>
+          <AlertDialogAction
             onClick={handleConfirm}
+            className={actionClass}
             disabled={isDialogLoading}
-            className="w-full sm:w-auto"
           >
             {isDialogLoading ? (
               <>
@@ -92,9 +90,9 @@ export function ConfirmationDialog({
             ) : (
               confirmText
             )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

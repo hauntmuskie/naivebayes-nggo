@@ -7,8 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
-import { loginAction } from "../_actions";
+import { Eye, EyeOff, Lock, User, Loader2 } from "lucide-react";
+import { loginAction } from "@/_actions/auth";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");
@@ -112,10 +112,18 @@ export function LoginForm() {
 
           <Button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 flex items-center justify-center"
             disabled={isLoading}
+            aria-busy={isLoading}
           >
-            {isLoading ? "Memproses..." : "Masuk"}
+            {isLoading ? (
+              <>
+                <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                Memproses...
+              </>
+            ) : (
+              "Masuk"
+            )}
           </Button>
         </form>
       </CardContent>

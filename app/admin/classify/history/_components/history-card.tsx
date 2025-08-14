@@ -4,14 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import {
-  Clock,
-  FileText,
-  Target,
-  Trash2,
-  TrendingUp,
-  ChevronRight,
-} from "lucide-react";
+import { Clock, FileText, Target, Trash2, ChevronRight } from "lucide-react";
 import { ClassificationHistorySelect } from "@/database/schema";
 import { format } from "date-fns";
 import { useConfirmationDialog } from "@/hooks/use-dialog";
@@ -32,7 +25,7 @@ export function HistoryCard({
   const handleDelete = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     openDialog({
       title: "Hapus Riwayat Klasifikasi",
       description: `Apakah Anda yakin ingin menghapus riwayat klasifikasi untuk file "${item.fileName}"? Tindakan ini tidak dapat dibatalkan.`,
@@ -87,15 +80,7 @@ export function HistoryCard({
             {item.totalRecords.toLocaleString()}
           </span>
         </div>
-        {item.accuracy && (
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-muted-foreground">Akurasi</span>
-            <span className="text-lg font-bold text-green-600 ml-auto">
-              {(item.accuracy * 100).toFixed(1)}%
-            </span>
-          </div>
-        )}
+        
         <div className="pt-2 border-t border-border/20">
           <div className="flex items-center justify-between">
             <div className="text-xs text-muted-foreground">
