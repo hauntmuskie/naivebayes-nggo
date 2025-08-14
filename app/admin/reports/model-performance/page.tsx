@@ -9,17 +9,41 @@ export default function ModelPerformanceReportPage() {
   const router = useRouter();
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [classNames, setClassNames] = useState<string[]>([]);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
       try {
         const models = await fetchModels();
+        let detectedClassNames: string[] = [];
         const mapped = models.map((m: any) => {
           const metric =
             Array.isArray(m.metrics) && m.metrics.length > 0
               ? m.metrics[0]
               : null;
+
+          // Extract class-specific metrics
+          let classMetrics: Record<string, any> = {};
+          if (metric && metric.classMetrics) {
+            const classEntries = Object.entries(metric.classMetrics).filter(
+              ([key]) =>
+                !["accuracy", "macro avg", "weighted avg"].includes(key)
+            );
+            classEntries.forEach(([className, data]) => {
+              classMetrics[className] = data;
+            });
+            // Collect class names for table header
+            if (classEntries.length > 0) {
+              detectedClassNames = Array.from(
+                new Set([
+                  ...detectedClassNames,
+                  ...classEntries.map(([className]) => className),
+                ])
+              );
+            }
+          }
+
           return {
             id: m.id,
             name: m.modelName,
@@ -31,14 +55,14 @@ export default function ModelPerformanceReportPage() {
                 })
               : "-",
             accuracy: metric ? metric.accuracy : m.accuracy,
-            precision: metric ? metric.precision : 0,
-            recall: metric ? metric.recall : 0,
-            f1: metric ? metric.f1Score : 0,
+            classMetrics,
           };
         });
         setData(mapped);
+        setClassNames(detectedClassNames);
       } catch (e) {
         setData([]);
+        setClassNames([]);
       }
       setLoading(false);
     }
@@ -78,16 +102,56 @@ export default function ModelPerformanceReportPage() {
           <table className="min-w-full border-collapse">
             <thead>
               <tr>
-                <th className="border border-black text-center">No</th>
-                <th className="border border-black text-center">Nama Model</th>
-                <th className="border border-black text-center">
+                <th className="border border-black text-center" rowSpan={2}>
+                  No
+                </th>
+                <th className="border border-black text-center" rowSpan={2}>
+                  Nama Model
+                </th>
+                <th className="border border-black text-center" rowSpan={2}>
+                  Akurasi
+                </th>
+                <th
+                  className="border border-black text-center"
+                  colSpan={classNames.length}
+                >
+                  Precision
+                </th>
+                <th
+                  className="border border-black text-center"
+                  colSpan={classNames.length}
+                >
+                  Recall
+                </th>
+                <th
+                  className="border border-black text-center"
+                  colSpan={classNames.length}
+                >
+                  F1-Score
+                </th>
+                <th
+                  className="border border-black text-center"
+                  colSpan={classNames.length}
+                >
+                  Support
+                </th>
+                <th className="border border-black text-center" rowSpan={2}>
                   Tanggal Pelatihan
                 </th>
-                <th className="border border-black text-center">Akurasi</th>
-                <th className="border border-black text-center">Precision</th>
-                <th className="border border-black text-center">Recall</th>
-                <th className="border border-black text-center">F1-Score</th>
-                {/* <th className="border border-black text-center">Confusion Matrix</th> */}
+                {/* <th className="border border-black text-center" rowSpan={2}>Confusion Matrix</th> */}
+              </tr>
+              <tr>
+                {["Precision", "Recall", "F1-Score", "Support"].flatMap(
+                  (metric) =>
+                    classNames.map((className) => (
+                      <th
+                        key={metric + "-" + className}
+                        className="border border-black text-center"
+                      >
+                        {className}
+                      </th>
+                    ))
+                )}
               </tr>
             </thead>
             <tbody>
@@ -98,19 +162,60 @@ export default function ModelPerformanceReportPage() {
                     {item.name}
                   </td>
                   <td className="border border-black text-center">
-                    {item.trainedAt}
-                  </td>
-                  <td className="border border-black text-center">
                     {(item.accuracy * 100).toFixed()}%
                   </td>
+                  {/* Precision cells */}
+                  {classNames.map((className) => (
+                    <td
+                      key={item.id + "-precision-" + className}
+                      className="border border-black text-center"
+                    >
+                      {item.classMetrics[className]?.precision !== undefined
+                        ? Math.round(
+                            item.classMetrics[className].precision * 100
+                          ) + "%"
+                        : "-"}
+                    </td>
+                  ))}
+                  {/* Recall cells */}
+                  {classNames.map((className) => (
+                    <td
+                      key={item.id + "-recall-" + className}
+                      className="border border-black text-center"
+                    >
+                      {item.classMetrics[className]?.recall !== undefined
+                        ? Math.round(
+                            item.classMetrics[className].recall * 100
+                          ) + "%"
+                        : "-"}
+                    </td>
+                  ))}
+                  {/* F1-Score cells */}
+                  {classNames.map((className) => (
+                    <td
+                      key={item.id + "-f1-" + className}
+                      className="border border-black text-center"
+                    >
+                      {item.classMetrics[className]?.["f1-score"] !== undefined
+                        ? Math.round(
+                            item.classMetrics[className]["f1-score"] * 100
+                          ) + "%"
+                        : "-"}
+                    </td>
+                  ))}
+                  {/* Support cells */}
+                  {classNames.map((className) => (
+                    <td
+                      key={item.id + "-support-" + className}
+                      className="border border-black text-center"
+                    >
+                      {item.classMetrics[className]?.support !== undefined
+                        ? item.classMetrics[className].support
+                        : "-"}
+                    </td>
+                  ))}
                   <td className="border border-black text-center">
-                    {(item.precision * 100).toFixed()}%
-                  </td>
-                  <td className="border border-black text-center">
-                    {(item.recall * 100).toFixed()}%
-                  </td>
-                  <td className="border border-black text-center">
-                    {(item.f1 * 100).toFixed()}%
+                    {item.trainedAt}
                   </td>
                   {/* <td className="border border-black text-center"><ConfusionMatrix matrix={item.confusionMatrix} /></td> */}
                 </tr>

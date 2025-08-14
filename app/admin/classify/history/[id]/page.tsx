@@ -15,6 +15,9 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
+import { id as localeId } from "date-fns/locale";
+import { ClassificationResultsChart } from "@/components/charts/classification-results-chart";
+import { ResultsList } from "@/components/results-list";
 
 export const revalidate = 300;
 export const dynamic = "force-static";
@@ -107,7 +110,7 @@ export default async function ClassificationDetailsPage({
         </div>
       </div>
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="border-border/40">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -137,8 +140,15 @@ export default async function ClassificationDetailsPage({
               <span className="text-sm font-medium">Diproses</span>
             </div>
             <div className="text-sm font-medium mt-1">
-              {format(classification.createdAt, "MMMM d, yyyy 'at' h:mm a")}
+              {format(classification.createdAt, "d MMMM yyyy 'pukul' HH:mm", {
+                locale: localeId,
+              })}
             </div>
+          </CardContent>
+        </Card>
+        <Card className="border-border/40">
+          <CardContent className="p-4">
+            <ClassificationResultsChart results={results} />
           </CardContent>
         </Card>
       </div>
@@ -156,37 +166,7 @@ export default async function ClassificationDetailsPage({
           {/* Results */}
           <div className="mt-6">
             <h4 className="font-semibold mb-3">Prediksi</h4>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
-              {results.slice(0, 10).map((result: any, index: number) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 bg-muted/30 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-mono text-muted-foreground">
-                      #{index + 1}
-                    </span>
-                    <Badge
-                      variant={
-                        result.actualClass === result.predictedClass
-                          ? "default"
-                          : "destructive"
-                      }
-                    >
-                      {result.predictedClass}
-                    </Badge>
-                  </div>
-                  <div className="text-sm font-medium">
-                    {(result.confidence * 100).toFixed()}%
-                  </div>
-                </div>
-              ))}
-              {results.length > 10 && (
-                <div className="text-center text-sm text-muted-foreground py-2">
-                  ... dan {results.length - 10} hasil lainnya
-                </div>
-              )}
-            </div>
+            <ResultsList results={results} />
           </div>
         </CardContent>
       </Card>

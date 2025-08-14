@@ -13,6 +13,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { format } from "date-fns";
+import { id as localeId } from "date-fns/locale";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useConfirmationDialog } from "@/hooks/use-dialog";
@@ -77,7 +78,7 @@ export function ModelCard({ model }: { model: ModelsWithMetrics }) {
           <span className="text-sm text-muted-foreground">Ditambahkan</span>
           <span className="text-sm font-medium text-foreground ml-auto">
             {model.createdAt
-              ? format(model.createdAt, "MMM d, yyyy")
+              ? format(model.createdAt, "d MMMM yyyy", { locale: localeId })
               : "Tidak diketahui"}
           </span>
         </div>
