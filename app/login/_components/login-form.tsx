@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { loginAction } from "../_actions";
 
 export function LoginForm() {
   const [username, setUsername] = useState("");
@@ -15,26 +16,27 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [_, startTransition] = useTransition();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
     try {
-      // Simple validation for admin credentials
-      if (username === "admin" && password === "admin") {
-        // Set a simple session cookie
-        document.cookie = "auth-session=admin; path=/; max-age=86400"; // 24 hours
-
+      const result = await loginAction(formData);
+      if (result.success) {
         toast.success("Login berhasil!", {
           description: "Selamat datang di dashboard admin",
         });
-
-        router.push("/admin/dashboard");
-        router.refresh();
+        startTransition(() => {
+          router.push("/admin/dashboard");
+          router.refresh();
+        });
       } else {
         toast.error("Login gagal!", {
-          description: "Username atau password tidak valid",
+          description: result.error || "Username atau password tidak valid",
         });
       }
     } catch (error) {
