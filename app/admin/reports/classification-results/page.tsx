@@ -32,9 +32,11 @@ export default function ClassificationResultsReportPage() {
         const classificationHistory = await fetchClassificationHistory();
         const mapped = classificationHistory.map((c: any) => {
           let airlineCounts: AirlineCounts = {};
+          let averageConfidence: number | null = null;
           try {
             const results = JSON.parse(c.results);
             if (results && results.results && Array.isArray(results.results)) {
+              const confidences: number[] = [];
               results.results.forEach((result: any) => {
                 try {
                   const dataString = result.data;
@@ -48,7 +50,17 @@ export default function ClassificationResultsReportPage() {
                   airlineCounts["Unknown"] =
                     (airlineCounts["Unknown"] || 0) + 1;
                 }
+
+                if (result && typeof result.confidence !== "undefined") {
+                  const num = Number(result.confidence);
+                  if (!Number.isNaN(num)) confidences.push(num);
+                }
               });
+
+              if (confidences.length > 0) {
+                averageConfidence =
+                  confidences.reduce((a, b) => a + b, 0) / confidences.length;
+              }
             }
           } catch (e) {
             console.error("Error parsing results:", e);
@@ -59,7 +71,12 @@ export default function ClassificationResultsReportPage() {
             fileName: c.fileName || "Unknown",
             modelName: c.modelName || "Unknown",
             totalRecords: c.totalRecords || 0,
-            accuracy: c.accuracy,
+            accuracy:
+              typeof averageConfidence === "number"
+                ? averageConfidence
+                : typeof c.accuracy === "number"
+                ? c.accuracy
+                : null,
             date: c.createdAt
               ? new Date(c.createdAt).toLocaleDateString("id-ID", {
                   day: "numeric",
@@ -181,7 +198,7 @@ export default function ClassificationResultsReportPage() {
                         </td>
                         <td className="border border-black text-center p-2">
                           {item.accuracy
-                            ? `${(item.accuracy * 100).toFixed(1)}%`
+                            ? `${(item.accuracy * 100).toFixed()}%`
                             : "-"}
                         </td>
                         <td className="border border-black text-center p-2">
